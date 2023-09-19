@@ -1,7 +1,6 @@
 #include <iostream>
 #include <Windows.h>
 
-
 void InitializeBuffer()
 {
     const int SCREEN_WIDTH = 200;
