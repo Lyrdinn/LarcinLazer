@@ -1,15 +1,16 @@
 #include <iostream>
+#include "grid.h"
 using namespace std;
 
-class Object
+class GameObject
 {
     private:
         string _name;
 
     public :
-        Object(){}
+        GameObject(){}
 
-        Object(string name)
+        GameObject(string name)
         {
             _name = name;
         }
@@ -26,7 +27,7 @@ class Tile
         int _x, _y;
 
     public : 
-        Object Object;
+        GameObject Object;
 
         Tile(int x, int y)
         {
@@ -44,14 +45,3 @@ class Tile
             return _y;
         }
 };
-
-int main()
-{
-    Tile tile(2, 5);
-    Object Object("Baba");
-    tile.Object = Object;
-
-    cout << tile.Object.GetName() << " " << tile.GetX() << " " << tile.GetY()<< endl;
-    return 0;
-}
-

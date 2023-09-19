@@ -1,11 +1,50 @@
 #include <iostream>
 #include <Windows.h>
+#include "grid.h"
+#include "draw.h"
+
+#define SCREEN_WIDTH 200
+#define SCREEN_HEIGHT 200
+
+void MoveDown(CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH], Tile tile)
+{
+    int x = tile.GetX();
+    int y = tile.GetY();
+    int color = buffer[y][x].Attributes;
+
+    //moving upper 3 characters
+    buffer[y + 1][x].Char.AsciiChar = buffer[y - 1][x].Char.AsciiChar;
+    buffer[y + 1][x].Attributes = color;
+    buffer[y + 1][x + 1].Char.AsciiChar = buffer[y - 1][x + 1].Char.AsciiChar;
+    buffer[y + 1][x + 1].Attributes = color;
+    buffer[y + 1][x + 2].Char.AsciiChar = buffer[y - 1][x + 2].Char.AsciiChar;
+    buffer[y + 1][x + 2].Attributes = color;
+
+    //moving bottom 3 characters
+    buffer[y + 2][x].Char.AsciiChar = buffer[y][x].Char.AsciiChar;
+    buffer[y + 2][x].Attributes = color;
+    buffer[y + 2][x + 1].Char.AsciiChar = buffer[y][x + 1].Char.AsciiChar;
+    buffer[y + 2][x + 1].Attributes = color;
+    buffer[y + 2][x + 2].Char.AsciiChar = buffer[y][x + 2].Char.AsciiChar;
+    buffer[y + 2][x + 2].Attributes = color;
+
+    //we clean the previous buffer characters
+    buffer[y - 1][x].Char.AsciiChar = '\0';
+    buffer[y - 1][x + 1].Char.AsciiChar = '\0';
+    buffer[y - 1][x + 2].Char.AsciiChar = '\0';
+    buffer[y][x].Char.AsciiChar = '\0';
+    buffer[y][x + 1].Char.AsciiChar = '\0';
+    buffer[y][x + 2].Char.AsciiChar = '\0';
+    buffer[y - 1][x].Attributes = 0;
+    buffer[y - 1][x + 1].Attributes = 0;
+    buffer[y - 1][x + 2].Attributes = 0;
+    buffer[y][x].Attributes = 0;
+    buffer[y][x + 1].Attributes = 0;
+    buffer[y][x + 2].Attributes = 0;
+}
 
 void InitializeBuffer()
 {
-    const int SCREEN_WIDTH = 200;
-    const int SCREEN_HEIGHT = 200;
-
     HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
 
     COORD dwBufferSize = { SCREEN_WIDTH,SCREEN_HEIGHT };
@@ -13,7 +52,6 @@ void InitializeBuffer()
     SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
     CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
-
     ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
 
     buffer[6][14].Char.AsciiChar = 'I';
@@ -50,39 +88,10 @@ void InitializeBuffer()
     buffer[6][13].Char.AsciiChar = 'A';
     buffer[6][13].Attributes = 95;
 
-    buffer[9][10].Char.AsciiChar = 'B';
-    buffer[9][10].Attributes = 95;
-    buffer[9][11].Char.AsciiChar = ' ';
-    buffer[9][11].Attributes = 95;
-    buffer[9][12].Char.AsciiChar = 'A';
-    buffer[9][12].Attributes = 95;
-    buffer[10][10].Char.AsciiChar = ' ';
-    buffer[10][10].Attributes = 95;
-    buffer[10][11].Char.AsciiChar = ' ';
-    buffer[10][11].Attributes = 95;
-    buffer[10][12].Char.AsciiChar = ' ';
-    buffer[10][12].Attributes = 95;
-    buffer[11][10].Char.AsciiChar = 'B';
-    buffer[11][10].Attributes = 95;
-    buffer[11][11].Char.AsciiChar = ' ';
-    buffer[11][11].Attributes = 95;
-    buffer[11][12].Char.AsciiChar = 'A';
-    buffer[11][12].Attributes = 95;
+    GameObject baba("Baba");
+    Tile tile(6,11);
 
-    buffer[9][22].Char.AsciiChar = 'A';
-    buffer[9][22].Attributes = 15;
-    buffer[10][20].Char.AsciiChar = 'A';
-    buffer[10][20].Attributes = 15;
-    buffer[10][21].Char.AsciiChar = 'A';
-    buffer[10][21].Attributes = 15;
-    buffer[10][22].Char.AsciiChar = 'A';
-    buffer[10][22].Attributes = 15;
-    buffer[11][20].Char.AsciiChar = 'A';
-    buffer[11][20].Attributes = 15;
-    buffer[11][21].Char.AsciiChar = 'A';
-    buffer[11][21].Attributes = 15;
-    buffer[11][22].Char.AsciiChar = 'A';
-    buffer[11][22].Attributes = 15;
+    MoveDown(buffer, tile);
 
     WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
 }
