@@ -131,8 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h" />
+    <ClInclude Include="src\gameobject.h" />
     <ClInclude Include="src\global.h" />
-    <ClInclude Include="src\grid.h" />
+    <ClInclude Include="src\tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
