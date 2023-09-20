@@ -9,6 +9,7 @@
 #define LEVEL_WIDTH 30
 #define LEVEL_HEIGHT 20
 
+<<<<<<< HEAD
 using namespace std;
 typedef map<pair<int, int>, Tile*> TileMap;
 
@@ -34,11 +35,66 @@ void AddBaba()
 
     // DrawObject(*tile, *baba);
     // Updtale Console
+=======
+void InitializeBuffer()
+{
+    HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
+
+    COORD dwBufferSize = { SCREEN_WIDTH,SCREEN_HEIGHT };
+    COORD dwBufferCoord = { 0, 0 };
+    SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
+
+    CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+    ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
+
+    buffer[6 + 2][14].Char.AsciiChar = 'I';
+    buffer[6 + 2][14].Attributes = 15;
+    buffer[6 + 2][15].Char.AsciiChar = ' ';
+    buffer[6 + 2][15].Attributes = 15;
+    buffer[6 + 2][16].Char.AsciiChar = 'S';
+    buffer[6 + 2][16].Attributes = 15;
+
+    buffer[5 + 2][17].Char.AsciiChar = ' ';
+    buffer[5 + 2][17].Attributes = 95;
+    buffer[5 + 2][18].Char.AsciiChar = ' ';
+    buffer[5 + 2][18].Attributes = 95;
+    buffer[5 + 2][19].Char.AsciiChar = ' ';
+    buffer[5 + 2][19].Attributes = 95;
+    buffer[6 + 2][17].Char.AsciiChar = 'Y';
+    buffer[6 + 2][17].Attributes = 95;
+    buffer[6 + 2][18].Char.AsciiChar = 'O';
+    buffer[6 + 2][18].Attributes = 95;
+    buffer[6 + 2][19].Char.AsciiChar = 'U';
+    buffer[6 + 2][19].Attributes = 95;
+
+
+    buffer[5 + 2][11].Char.AsciiChar = 'B';
+    buffer[5 + 2][11].Attributes = 95;
+    buffer[5 + 2][12].Char.AsciiChar = ' ';
+    buffer[5 + 2][12].Attributes = 95;
+    buffer[5 + 2][13].Char.AsciiChar = 'A';
+    buffer[5 + 2][13].Attributes = 95;
+    buffer[6 + 2][11].Char.AsciiChar = 'B';
+    buffer[6 + 2][11].Attributes = 95;
+    buffer[6 + 2][12].Char.AsciiChar = ' ';
+    buffer[6 + 2][12].Attributes = 95;
+    buffer[6 + 2][13].Char.AsciiChar = 'A';
+    buffer[6 + 2][13].Attributes = 95;
+
+    GameObject baba("Baba");
+    Tile tile(8,11);
+
+    //MoveHorizontal(buffer, tile, -1);
+    MoveVertical(buffer, tile, -1);
+
+    WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
+>>>>>>> 8fdcd05 (Fini les fonction de redessinage de cases)
 }
 
 
 int main()
 {
+<<<<<<< HEAD
     InitTileMap();
     AddBaba();
     return 0;
@@ -127,3 +183,8 @@ void MoveDown(CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH], Tile tile)
     buffer[y][x + 2].Attributes = 0;
 }
 */
+=======
+    InitializeBuffer();
+    return 0;
+}
+>>>>>>> 8fdcd05 (Fini les fonction de redessinage de cases)
