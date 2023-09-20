@@ -1,20 +1,16 @@
-<<<<<<< HEAD
-#include <Windows>
+#pragma once
+#include <iostream>
+#include <windows.h>
 #include "grid.h"
+#include "global.h"
 
-#define TILE_HEIGHT
-#define TILE_WIDTH
+
+#define SCREEN_WIDTH 200
+#define SCREEN_HEIGHT 200
 
 class Screen
 {
 private:
-=======
-#include "draw.h"
-
-class Screen
-{
-private :
->>>>>>> 5dcef8d (Classe Screen)
     HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
 
     COORD dwBufferSize = { SCREEN_WIDTH,SCREEN_HEIGHT };
@@ -26,8 +22,6 @@ private :
     void InitScreen()
     {
         ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
-<<<<<<< HEAD
-
         WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
     }
 
@@ -37,25 +31,13 @@ public:
         InitScreen();
     };
 
-    void DrawObject(Tile tile, GameObject object)
+    void DrawBaba(Tile tile)
     {
         int x = tile.GetX();
         int y = tile.GetY();
 
-        for (int i = 0; i < TILE_WIDTH; i++)
-        {
-            buffer[y - 1][x].Char.AsciiChar = object.string[i];
-            buffer[y - 1][x].Attributes = object.color[i];
-        }
-
-        for (int i = TILE_WIDTH; i < 2 * TILE_WIDTH; i++)
-        {
-            buffer[y][x].Char.AsciiChar = object.string[i];
-            buffer[y][x].Attributes = object.color[i];
-        }
-
         buffer[y - 1][x].Char.AsciiChar = 'B';
-        buffer[y - 1][x].Attributes = color;
+        buffer[y - 1][x].Attributes = 95;
         buffer[y - 1][x + 1].Char.AsciiChar = ' ';
         buffer[y - 1][x + 1].Attributes = 95;
         buffer[y - 1][x + 2].Char.AsciiChar = 'A';
@@ -68,39 +50,6 @@ public:
         buffer[y][x + 2].Attributes = 95;
     }
 
-    /*
-        We move from 2 in the y axis and from 3 in the axis.
-    */
-    void MoveObject(Tile tile, int xdir, int ydir)
-=======
-        WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
-    }
-
-public :
-    Screen() 
-    {
-        InitScreen();
-    };
-
-    void DrawBaba(Tile tile)
-    {
-        int x = tile.GetX();
-        int y = tile.GetY();
-
-        buffer[y-1][x].Char.AsciiChar = 'B';
-        buffer[y-1][x].Attributes = 95;
-        buffer[y-1][x+1].Char.AsciiChar = ' ';
-        buffer[y-1][x+1].Attributes = 95;
-        buffer[y-1][x+2].Char.AsciiChar = 'A';
-        buffer[y-1][x+2].Attributes = 95;
-        buffer[y][x].Char.AsciiChar = 'B';
-        buffer[y][x].Attributes = 95;
-        buffer[y][x+1].Char.AsciiChar = ' ';
-        buffer[y][x+1].Attributes = 95;
-        buffer[y][x+2].Char.AsciiChar = 'A';
-        buffer[y][x+2].Attributes = 95;
-    }
- 
     void MoveHorizontal(Tile tile, int dir)
     {
         int x = tile.GetX();
@@ -139,29 +88,12 @@ public :
     }
 
     void MoveVertical(Tile tile, int dir)
->>>>>>> 5dcef8d (Classe Screen)
     {
         int x = tile.GetX();
         int y = tile.GetY();
         int color = buffer[y][x].Attributes;
 
         //moving upper 3 characters
-<<<<<<< HEAD
-        buffer[y + 2 * ydir][x + 3 * xdir].Char.AsciiChar = buffer[y][x].Char.AsciiChar;
-        buffer[y + 2 * ydir][x + 3 * xdir].Attributes = color;
-        buffer[y + 2 * ydir][x + 1 + 3 * xdir].Char.AsciiChar = buffer[y][x + 1].Char.AsciiChar;
-        buffer[y + 2 * ydir][x + 1 + 3 * xdir].Attributes = color;
-        buffer[y + 2 * ydir][x + 2 + 3 * xdir].Char.AsciiChar = buffer[y][x + 2].Char.AsciiChar;
-        buffer[y + 2 * ydir][x + 2 + 3 * xdir].Attributes = color;
-
-        //moving bottom 3 characters
-        buffer[y + 1 + 2 * ydir][x + 3 * xdir].Char.AsciiChar = buffer[y + 1][x].Char.AsciiChar;
-        buffer[y + 1 + 2 * ydir][x + 3 * xdir].Attributes = color;
-        buffer[y + 1 + 2 * ydir][x + 1 + 3 * xdir].Char.AsciiChar = buffer[y + 1][x + 1].Char.AsciiChar;
-        buffer[y + 1 + 2 * ydir][x + 1 + 3 * xdir].Attributes = color;
-        buffer[y + 1 + 2 * ydir][x + 2 + 3 * xdir].Char.AsciiChar = buffer[y + 1][x + 2].Char.AsciiChar;
-        buffer[y + 1 + 2 * ydir][x + 2 + 3 * xdir].Attributes = color;
-=======
         buffer[y - 1 + 2 * dir][x].Char.AsciiChar = buffer[y - 1][x].Char.AsciiChar;
         buffer[y - 1 + 2 * dir][x].Attributes = color;
         buffer[y - 1 + 2 * dir][x + 1].Char.AsciiChar = buffer[y - 1][x + 1].Char.AsciiChar;
@@ -176,7 +108,6 @@ public :
         buffer[y + 2 * dir][x + 1].Attributes = color;
         buffer[y + 2 * dir][x + 2].Char.AsciiChar = buffer[y][x + 2].Char.AsciiChar;
         buffer[y + 2 * dir][x + 2].Attributes = color;
->>>>>>> 5dcef8d (Classe Screen)
 
         //we clean the previous buffer characters
         buffer[y - 1][x].Char.AsciiChar = '\0';

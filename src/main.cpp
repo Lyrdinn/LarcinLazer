@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "gameobject.h"
 
+<<<<<<< HEAD
 #define SCREEN_WIDTH 200
 #define SCREEN_HEIGHT 200
 #define LEVEL_WIDTH 30
@@ -37,6 +38,9 @@ void AddBaba()
     // Updtale Console
 =======
 void InitializeBuffer()
+=======
+/*void InitializeBuffer()
+>>>>>>> 5dcef8d (Classe Screen)
 {
     HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -81,6 +85,7 @@ void InitializeBuffer()
     buffer[6 + 2][13].Char.AsciiChar = 'A';
     buffer[6 + 2][13].Attributes = 95;
 
+<<<<<<< HEAD
     GameObject baba("Baba");
     Tile tile(8,11);
 
@@ -90,10 +95,14 @@ void InitializeBuffer()
     WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
 >>>>>>> 8fdcd05 (Fini les fonction de redessinage de cases)
 }
+=======
+}*/
+>>>>>>> 5dcef8d (Classe Screen)
 
 
 int main()
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     InitTileMap();
     AddBaba();
@@ -185,6 +194,18 @@ void MoveDown(CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH], Tile tile)
 */
 =======
     InitializeBuffer();
+=======
+    Screen screen;
+
+    GameObject baba("Baba");
+    Tile tile(6, 6);
+    screen.DrawBaba(tile);
+    screen.UpdateScreen();
+
+    screen.MoveHorizontal(tile, 1);
+    screen.UpdateScreen();
+
+>>>>>>> 5dcef8d (Classe Screen)
     return 0;
 }
 >>>>>>> 8fdcd05 (Fini les fonction de redessinage de cases)
