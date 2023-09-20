@@ -5,7 +5,7 @@
 #include "global.h"
 
 
-#define SCREEN_WIDTH 200
+#define SCREEN_WIDTH 300
 #define SCREEN_HEIGHT 200
 
 class Screen
@@ -48,6 +48,42 @@ public:
         buffer[y][x + 1].Attributes = 95;
         buffer[y][x + 2].Char.AsciiChar = 'A';
         buffer[y][x + 2].Attributes = 95;
+    }
+    void MoveObject(Tile tile, int xdir, int ydir)
+    {
+        int x = tile.GetX();
+        int y = tile.GetY();
+        int color = buffer[y][x].Attributes;
+
+        //moving upper 3 characters
+        buffer[y - 1 + 2 * ydir][x + 3 * xdir].Char.AsciiChar = buffer[y][x].Char.AsciiChar;
+        buffer[y - 1 + 2 * ydir][x + 3 * xdir].Attributes = color;
+        buffer[y - 1 + 2 * ydir][x + 1 + 3 * xdir].Char.AsciiChar = buffer[y][x + 1].Char.AsciiChar;
+        buffer[y - 1 + 2 * ydir][x + 1 + 3 * xdir].Attributes = color;
+        buffer[y - 1 + 2 * ydir][x + 2 + 3 * xdir].Char.AsciiChar = buffer[y][x + 2].Char.AsciiChar;
+        buffer[y - 1 + 2 * ydir][x + 2 + 3 * xdir].Attributes = color;
+
+        //moving bottom 3 characters
+        buffer[y + 2 * ydir][x + 3 * xdir].Char.AsciiChar = buffer[y][x].Char.AsciiChar;
+        buffer[y + 2 * ydir][x + 3 * xdir].Attributes = color;
+        buffer[y + 2 * ydir][x + 1 + 3 * xdir].Char.AsciiChar = buffer[y][x + 1].Char.AsciiChar;
+        buffer[y + 2 * ydir][x + 1 + 3 * xdir].Attributes = color;
+        buffer[y + 2 * ydir][x + 2 + 3 * xdir].Char.AsciiChar = buffer[y][x + 2].Char.AsciiChar;
+        buffer[y + 2 * ydir][x + 2 + 3 * xdir].Attributes = color;
+
+        //we clean the previous buffer characters
+        buffer[y - 1][x].Char.AsciiChar = '\0';
+        buffer[y - 1][x + 1].Char.AsciiChar = '\0';
+        buffer[y - 1][x + 2].Char.AsciiChar = '\0';
+        buffer[y][x].Char.AsciiChar = '\0';
+        buffer[y][x + 1].Char.AsciiChar = '\0';
+        buffer[y][x + 2].Char.AsciiChar = '\0';
+        buffer[y - 1][x].Attributes = 0;
+        buffer[y - 1][x + 1].Attributes = 0;
+        buffer[y - 1][x + 2].Attributes = 0;
+        buffer[y][x].Attributes = 0;
+        buffer[y][x + 1].Attributes = 0;
+        buffer[y][x + 2].Attributes = 0;
     }
 
     void MoveHorizontal(Tile tile, int dir)

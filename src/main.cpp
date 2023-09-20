@@ -202,7 +202,7 @@ void MoveDown(CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH], Tile tile)
     screen.DrawBaba(tile);
     screen.UpdateScreen();
 
-    screen.MoveHorizontal(tile, 1);
+    screen.MoveObject(tile, 0,1);
     screen.UpdateScreen();
 
 >>>>>>> 5dcef8d (Classe Screen)
