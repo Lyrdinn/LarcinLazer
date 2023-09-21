@@ -3,11 +3,15 @@
 #include <map>
 #include "tile.h"
 #include "draw.h"
+#include <conio.h>
 
 using namespace std;
 typedef map<pair<int, int>, Tile*> TileMap;
 
 TileMap tileMap;
+Tile* playerPos;
+Player* player;
+Screen s;
 
 void InitTileMap()
 {
@@ -23,23 +27,57 @@ void InitTileMap()
 
 void DrawLevel1() 
 {
-    Player* player = new Player();
-    Tile* oldtile = tileMap.at(make_pair(6, 11));
-    oldtile->object = player;
+    player = new Player();
+    Tile* tile = tileMap.at(make_pair(3, 5));
+    s.DrawSprite(*tile, player->sprite);
+    tile->object = player;
 
-    Screen s;
-    s.DrawSprite(*oldtile, player->sprite);
+    playerPos = tile;
 
-    Tile* newtile = tileMap.at(make_pair(8, 11));
-    s.MoveObject(*oldtile, *newtile);
     s.UpdateScreen();
 }
-
 
 int main()
 {
     InitTileMap();
     DrawLevel1();
+
+    Tile* newPlayerPos;
+    
+    //Check if player can move to the tile -> if the tile has a wall or not.
+    while (true)
+    {
+        switch (_getch()) {
+        case 'z':
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY() - 1, playerPos->GetX()));
+            s.MoveObject(*playerPos, *newPlayerPos);
+            newPlayerPos->object = player;
+            playerPos->object = nullptr;
+            playerPos = newPlayerPos;
+        case 's' :
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY() + 1, playerPos->GetX()));
+            s.MoveObject(*playerPos, *newPlayerPos);
+            newPlayerPos->object = player;
+            playerPos->object = nullptr;
+            playerPos = newPlayerPos;
+        case 'q' :
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
+            s.MoveObject(*playerPos, *newPlayerPos);
+            newPlayerPos->object = player;
+            playerPos->object = nullptr;
+            playerPos = newPlayerPos;
+        case 'd' :
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
+            s.MoveObject(*playerPos, *newPlayerPos);
+            newPlayerPos->object = player;
+            playerPos->object = nullptr;
+            playerPos = newPlayerPos;
+        
+        }
+
+        s.UpdateScreen();
+
+    }
 
     return 0;
 }
