@@ -32,7 +32,7 @@ public:
         InitScreen();
     };
 
-    void DrawObject(Tile tile, GameObject object)
+    void DrawSprite(Tile tile, Sprite sprite)
     {
         int x = tile.GetX();
         int y = tile.GetY();
@@ -41,31 +41,22 @@ public:
         {
             for (int j = 0; j < TILE_WIDTH; j++)
             {
-               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = object.sprite[i][j];
-               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = object.color[i][j];
+               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = sprite.characters[i][j];
+               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = sprite.color[i][j];
             }
         }
     }
 
-    /*
-        We move from 2 in the y axis and from 3 in the axis.
-    */
-    void MoveObject(Tile tile, GameObject object, int xdir, int ydir)
+    void MoveObject(Tile oldTile, Tile newTile)
     {
         int x = tile.GetX() + xdir;
         int y = tile.GetY() + ydir;
 
-        DrawObject(Tile tile, GameObject object);
-           
-        //Decoloring the old tile.
-        for (int i = 0; i < TILE_HEIGHT; i++)
-        {
-            for (int j = 0; j < TILE_WIDTH; j++)
-            {
-                buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = '\0';
-                buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = 0;
-            }
-        }
+        //Drawing the sprite on the new tile.
+        DrawSprite(newTile, *oldTile.object.sprite);
+
+        //Recoloring the old tile.
+        DrawSprite(oldTile, oldTile.sprite);
     }
 
     void UpdateScreen()
