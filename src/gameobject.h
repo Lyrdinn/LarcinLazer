@@ -1,41 +1,34 @@
 #pragma once
 #include <string>
+#include "global.h"
 using namespace std;
 
-class GameObject
+class Sprite
 {
 public:
-    string name;
+    char characters[TILE_HEIGHT][TILE_WIDTH];
 
-    string text;
-
-    int colors[6];
+    int colors[TILE_HEIGHT][TILE_WIDTH];
 };
 
-class Baba : public GameObject
+class GameObject : public Sprite 
 {
-public:
-    Baba()
-    {
-        name = "Baba";
-        text = "      ";
 
-        for (auto& color : colors) {
-            color = 95;
-        }    
-    }
 };
 
-class BabaText : public GameObject
+
+class Player : public GameObject
 {
 public:
-    BabaText()
+    Player()
     {
-        name = "BabaText";
-        text = "B AB A";
-        
-        for (auto& color : colors) {
-            color = 95;
+        for (int y = 0; y < TILE_HEIGHT; y++)
+        {
+            for (int x = 0; x < TILE_WIDTH; x++)
+            {
+                characters[y][x] = 'p';
+                colors[y][x] = 95;
+            }
         }
     }
 };

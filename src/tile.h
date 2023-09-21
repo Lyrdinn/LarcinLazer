@@ -3,12 +3,12 @@
 #include "gameobject.h"
 using namespace std;
 
-class Tile
+class Tile : public Sprite
 {
 private:
     int _y, _x;
 
-    GameObject _object;
+    GameObject* _object;
 
 public:
     Tile(int y, int x)
@@ -27,7 +27,7 @@ public:
         return _y;
     }
 
-    void SetGameObject(GameObject& object) 
+    void SetGameObject(GameObject* object) 
     {
         _object = object;
     }
