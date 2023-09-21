@@ -5,9 +5,6 @@
 #include "gameobject.h"
 #include "global.h"
 
-#define TILE_HEIGHT
-#define TILE_WIDTH
-
 class Screen
 {
 private:
@@ -32,7 +29,7 @@ public:
         InitScreen();
     };
 
-    void DrawSprite(Tile tile, Sprite sprite)
+    void DrawSprite(Tile& tile, Sprite& sprite)
     {
         int x = tile.GetX();
         int y = tile.GetY();
@@ -42,18 +39,15 @@ public:
             for (int j = 0; j < TILE_WIDTH; j++)
             {
                buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = sprite.characters[i][j];
-               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = sprite.color[i][j];
+               buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = sprite.colors[i][j];
             }
         }
     }
 
-    void MoveObject(Tile oldTile, Tile newTile)
+    void MoveObject(Tile& oldTile, Tile& newTile)
     {
-        int x = tile.GetX() + xdir;
-        int y = tile.GetY() + ydir;
-
         //Drawing the sprite on the new tile.
-        DrawSprite(newTile, *oldTile.object.sprite);
+        DrawSprite(newTile, oldTile.object->sprite);
 
         //Recoloring the old tile.
         DrawSprite(oldTile, oldTile.sprite);

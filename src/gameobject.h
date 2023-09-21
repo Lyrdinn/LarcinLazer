@@ -11,11 +11,11 @@ public:
     int colors[TILE_HEIGHT][TILE_WIDTH];
 };
 
-class GameObject : public Sprite 
+class GameObject
 {
-
+public :
+    Sprite sprite;
 };
-
 
 class Player : public GameObject
 {
@@ -26,8 +26,8 @@ public:
         {
             for (int x = 0; x < TILE_WIDTH; x++)
             {
-                characters[y][x] = 'p';
-                colors[y][x] = 95;
+                sprite.characters[y][x] = 'p';
+                sprite.colors[y][x] = 95;
             }
         }
     }

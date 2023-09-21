@@ -2,12 +2,7 @@
 #include <Windows.h>
 #include <map>
 #include "tile.h"
-#include "gameobject.h"
-
-#define SCREEN_WIDTH 200
-#define SCREEN_HEIGHT 200
-#define LEVEL_WIDTH 30
-#define LEVEL_HEIGHT 20
+#include "draw.h"
 
 using namespace std;
 typedef map<pair<int, int>, Tile*> TileMap;
@@ -26,21 +21,26 @@ void InitTileMap()
     }
 }
 
-void AddBaba() 
+void DrawLevel1() 
 {
-    Baba* baba = new Baba();
-    Tile* tile = tileMap.at(make_pair(6, 11));
-    (*tile).SetGameObject(*baba);
+    Player* player = new Player();
+    Tile* oldtile = tileMap.at(make_pair(6, 11));
+    oldtile->object = player;
 
-    // DrawObject(*tile, *baba);
-    // Updtale Console
+    Screen s;
+    s.DrawSprite(*oldtile, player->sprite);
+
+    Tile* newtile = tileMap.at(make_pair(8, 11));
+    s.MoveObject(*oldtile, *newtile);
+    s.UpdateScreen();
 }
 
 
 int main()
 {
     InitTileMap();
-    AddBaba();
+    DrawLevel1();
+
     return 0;
 }
 
