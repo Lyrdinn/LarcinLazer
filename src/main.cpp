@@ -11,7 +11,7 @@ typedef map<pair<int, int>, Tile*> TileMap;
 TileMap tileMap;
 Tile* playerPos;
 Player* player;
-Screen s;
+Screen screen;
 
 void InitTileMap()
 {
@@ -29,12 +29,26 @@ void DrawLevel1()
 {
     player = new Player();
     Tile* tile = tileMap.at(make_pair(3, 5));
-    s.DrawSprite(*tile, player->sprite);
+    screen.DrawSprite(*tile, player->sprite);
     tile->object = player;
 
     playerPos = tile;
 
-    s.UpdateScreen();
+    screen.UpdateScreen();
+}
+
+bool canMovePlayer(Tile* newPlayerPos)
+{
+    //Vérifier que la tile n'est pas un mur. A noter que si il va sur un laser on veut le laisser aller dessus.
+    return true;
+}
+
+void movePlayer(Tile* newPlayerPos)
+{
+    screen.MoveObject(*playerPos, *newPlayerPos);
+    newPlayerPos->object = player;
+    playerPos->object = nullptr;
+    playerPos = newPlayerPos;
 }
 
 int main()
@@ -47,35 +61,31 @@ int main()
     //Check if player can move to the tile -> if the tile has a wall or not.
     while (true)
     {
+
         switch (_getch()) {
         case 'z':
             newPlayerPos = tileMap.at(make_pair(playerPos->GetY() - 1, playerPos->GetX()));
-            s.MoveObject(*playerPos, *newPlayerPos);
-            newPlayerPos->object = player;
-            playerPos->object = nullptr;
-            playerPos = newPlayerPos;
+            if (canMovePlayer(newPlayerPos))
+                movePlayer(newPlayerPos);
+            break;
         case 's' :
             newPlayerPos = tileMap.at(make_pair(playerPos->GetY() + 1, playerPos->GetX()));
-            s.MoveObject(*playerPos, *newPlayerPos);
-            newPlayerPos->object = player;
-            playerPos->object = nullptr;
-            playerPos = newPlayerPos;
+            if (canMovePlayer(newPlayerPos))
+                movePlayer(newPlayerPos);
+            break;
+        case 'd':
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
+            if (canMovePlayer(newPlayerPos))
+                movePlayer(newPlayerPos);
+            break;
         case 'q' :
             newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
-            s.MoveObject(*playerPos, *newPlayerPos);
-            newPlayerPos->object = player;
-            playerPos->object = nullptr;
-            playerPos = newPlayerPos;
-        case 'd' :
-            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
-            s.MoveObject(*playerPos, *newPlayerPos);
-            newPlayerPos->object = player;
-            playerPos->object = nullptr;
-            playerPos = newPlayerPos;
-        
+            if (canMovePlayer(newPlayerPos))
+                movePlayer(newPlayerPos);
+            break;
         }
 
-        s.UpdateScreen();
+        screen.UpdateScreen();
 
     }
 
