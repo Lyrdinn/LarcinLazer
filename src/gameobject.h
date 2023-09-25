@@ -27,7 +27,7 @@ public:
             for (int x = 0; x < TILE_WIDTH; x++)
             {
                 sprite.characters[y][x] = 'p';
-                sprite.colors[y][x] = 95;
+                sprite.colors[y][x] = 0; //95
             }
         }
     }
