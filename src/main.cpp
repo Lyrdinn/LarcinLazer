@@ -1,50 +1,64 @@
 #include <iostream>
 #include <Windows.h>
+#include <conio.h>
 #include <map>
 #include "tile.h"
 #include "draw.h"
-#include <conio.h>
+#include "level.h"
 
 using namespace std;
 typedef map<pair<int, int>, Tile*> TileMap;
 
 TileMap tileMap;
+Tile* startPos;
 Tile* playerPos;
 Player* player;
 Screen screen;
 
-void InitTileMap()
+void StartLevel(Level level)
 {
-    for (int x = 0; x < LEVEL_WIDTH; x++)
+    // Build TileMap
+    for (int y = 0; y < LEVEL_HEIGHT; y++)
     {
-        for (int y = 0; y < LEVEL_HEIGHT; y++)
+        for (int x = 0; x < LEVEL_WIDTH; x++)
         {
-            WallTile* tile = new WallTile(y, x);
+            char tileType = level.map[y][x];
+
+            Tile* tile;
+
+            switch (tileType) {
+            case 'w':
+                tile = new WallTile(y, x);
+                break;
+            case ' ':
+                tile = new FloorTile(y, x);
+                break;
+            case 'l':
+                tile = new LaserTile(y, x);
+                break;
+            case 'd':
+                tile = new DoorTile(y, x);
+                break;
+            default:
+                tile = new Tile(y, x);
+                break;
+            }
+            
             tileMap[make_pair(y, x)] = tile;
             screen.DrawSprite(*tile, tile->sprite);
         }
     }
-}
 
-void DrawLevel1() 
-{
-    for (int y = 4; y < 7; y++)
-    {
-        for (int x = 15; x < 24; x++)
-        {
-            Tile* oldTile = tileMap.at(make_pair(y, x));
-            delete(oldTile);
+    // Init Start Position
+    startPos = tileMap.at(level.startPosCoordinates);
 
-            Tile* tile = new FloorTile(y, x);
-            tileMap[make_pair(y, x)] = tile;
-            screen.DrawSprite(*tile, tile->sprite);
-        }
-    }
-
+    // Init Player
     player = new Player();
-    playerPos = tileMap.at(make_pair(5, 15));
+    playerPos = startPos;
     playerPos->object = player;
     screen.DrawSprite(*playerPos, player->sprite);
+
+    // Draw everything on screen
     screen.UpdateScreen();
 }
 
@@ -77,21 +91,21 @@ void CheckForMovement()
         return;
     }
 
-    string s = typeid(*newPlayerPos).name();
     if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
+    if (newPlayerPos->isDeadly) MovePlayer(startPos);
     screen.UpdateScreen();
 }
 
 int main()
 {
-    InitTileMap();
-    DrawLevel1();
+    Level level = Level1();
+    StartLevel(level);
 
     while (true)
     {
         CheckForMovement();
     }
-
+    
     return 0;
 }
 
