@@ -130,13 +130,13 @@ void CheckForPlayerMovement()
 
 int main()
 {
-    Level level = Level1();
-    StartLevel(level);
+    //Level level = Level1();
+    //StartLevel(level);
 
-    Screen screen = Screen();
-    MenuScene menuScene(screen);
-    LevelSelectScene levelSelectScene(screen);
-    GameScene gameScene(screen);
+    Screen screen;
+    MenuScene * menuScene = new MenuScene(screen);
+    LevelSelectScene * levelSelectScene = new LevelSelectScene(screen);
+    GameScene * gameScene = new GameScene(screen);
 
     SceneManager instance = SceneManager::instance();
     instance.menuScene = menuScene;
@@ -145,9 +145,10 @@ int main()
 
     instance.ChangeScene(menuScene);
 
+    cout << (instance._currentScene == nullptr) << endl;
+
     while (true)
     {   
-        screen.ReadOutput();
         instance.Update();
     }
     

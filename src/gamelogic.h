@@ -16,7 +16,8 @@ public :
 		_screen = screen;
 	}
 
-	virtual void load() {}
+	virtual void load() {
+	}
 	void unload()
 	{
 		_screen.ClearScreen();
@@ -27,15 +28,18 @@ public :
 
 class SceneManager {
 private:
-	Scene* _currentScene;
-	SceneManager() { }
+	bool canUpdate;
+	SceneManager() {
+	
+	}
 
 public:
+	Scene* _currentScene;
 	Level currentLevel;
 
-	Scene menuScene;
-	Scene levelSelectScene;
-	Scene gameScene;
+	Scene * menuScene;
+	Scene * levelSelectScene;
+	Scene * gameScene;
 
 	static SceneManager& instance()
 	{
@@ -43,23 +47,25 @@ public:
 		return _instance;
 	}
 
-	void ChangeScene(Scene newScene)
+	void ChangeScene(Scene * newScene)
 	{
+		canUpdate = false;
 		if (_currentScene != nullptr) {
 			_currentScene->unload();
-			*(_currentScene) = newScene;
+			_currentScene = newScene;
 			_currentScene->load();
 		}
 		else
 		{
-			*(_currentScene) = newScene;
+			_currentScene = newScene;
 			_currentScene->load();
 		}
+		canUpdate = true;
 	}
 
 	void Update()
 	{
-		_currentScene->update();
+		if (_currentScene != nullptr && canUpdate == true) _currentScene->update();
 	}
 
 	void QuitGame()
@@ -77,27 +83,27 @@ public :
 
 	MenuScene(Screen screen) : Scene(screen) {}
 
+	//Gets called everyframe
 	void update() override
 	{
-		while (true)
-		{
-			char c = _getch();
-			if (c == QUIT) {
-				SceneManager sceneManager = SceneManager::instance();
-				sceneManager.QuitGame();
-			}
-			else {
-				SceneManager sceneManager = SceneManager::instance();
-				sceneManager.ChangeScene(sceneManager.levelSelectScene);
-			}
+		cout << "update" << endl;
+
+		char c = _getch();
+		if (c == QUIT) {
+			SceneManager sceneManager = SceneManager::instance();
+			sceneManager.QuitGame();
+		}
+		else {
+			SceneManager sceneManager = SceneManager::instance();
+			sceneManager.ChangeScene(sceneManager.levelSelectScene);
 		}
 	}
 
 	void load() override
 	{
-		cout << "loading menu screen" << endl;
 		_screen.DrawMenuScreen();
 		_screen.UpdateScreen();
+		cout << "loaded" << endl;
 	}
 
 	void freescene() override {}
@@ -128,14 +134,16 @@ public :
 		_screen.UpdateScreen();
 	}
 
+	//Gets called every frame
 	void update() override
 	{
+		_screen.ReadOutput();
 		LevelButton* currentButton = nullptr;
 
-		while (true)
-		{
-			//Get player UI input.
-			switch (_getch()) {
+		cout << "update" << endl;
+
+		//Get player UI input.
+		switch (_getch()) {
 			case UP:
 				_screen.DrawButtonUnHovered(currentButton);
 				if (currentButton == b_level_1) currentButton = b_level_2;
@@ -161,7 +169,6 @@ public :
 				break;
 			default:
 				break;
-			}
 		}
 	}
 
@@ -271,13 +278,11 @@ public :
 		_screen.UpdateScreen();
 	}
 
+	//Gets called every frame
 	void update() override
 	{
-		while (true)
-		{
-			//check win conditions
-			CheckForPlayerMovement();
-		}
+		//check win conditions
+		CheckForPlayerMovement();
 	}
 
 	void freescene() override
