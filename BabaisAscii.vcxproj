@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="src\gameobject.h" />
     <ClInclude Include="src\global.h" />
+    <ClInclude Include="src\gamelogic.h" />
     <ClInclude Include="src\tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

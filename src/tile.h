@@ -9,7 +9,7 @@ private:
     int _y, _x;
 
 public:
-    bool isWalkable, isDeadly, isWining;
+    bool isWalkable, isDeadly, isWining = false;
 
     Sprite sprite = Sprite();
 

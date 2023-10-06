@@ -2,9 +2,10 @@
 #include <Windows.h>
 #include <conio.h>
 #include <map>
-#include "tile.h"
+#include "gamelogic.h"
+#include "global.h"
 #include "draw.h"
-#include "level.h"
+#include "ui.h"
 
 using namespace std;
 typedef map<pair<int, int>, Tile*> TileMap;
@@ -15,8 +16,38 @@ Tile* playerPos;
 Player* player;
 Screen screen;
 
+MenuButton* startButton;
+
+void MainMenu();
+void StartLevel() {}
+void LevelSelection() {}
+
+void MainMenu()
+{
+    //Drawing the main menu screen
+    screen.ClearScreen();
+    screen.DrawMenuScreen();
+    screen.UpdateScreen();
+
+    while (true)
+    {
+        char c = _getch();
+        if (c == QUIT)
+        {
+            exit(0);
+        }
+        else {
+            LevelSelection();
+        }
+    }
+}
+
+
 void StartLevel(Level level)
 {
+    //Drawing the level selection screen
+    screen.ClearScreen();
+
     // Build TileMap
     for (int y = 0; y < LEVEL_HEIGHT; y++)
     {
@@ -70,25 +101,25 @@ void MovePlayer(Tile* newPlayerPos)
     playerPos = newPlayerPos;
 }
 
-void CheckForMovement() 
+void CheckForPlayerMovement() 
 {
     Tile* newPlayerPos;
 
     switch (_getch()) {
-    case 'z':
-        newPlayerPos = tileMap.at(make_pair(playerPos->GetY() - 1, playerPos->GetX()));
-        break;
-    case 's':
-        newPlayerPos = tileMap.at(make_pair(playerPos->GetY() + 1, playerPos->GetX()));
-        break;
-    case 'd':
-        newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
-        break;
-    case 'q':
-        newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
-        break;
-    default:
-        return;
+        case UP:
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY() - 1, playerPos->GetX()));
+            break;
+        case DOWN:
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY() + 1, playerPos->GetX()));
+            break;
+        case RIGHT:
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
+            break;
+        case LEFT:
+            newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
+            break;
+        default:
+            return;
     }
 
     if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
@@ -96,14 +127,28 @@ void CheckForMovement()
     screen.UpdateScreen();
 }
 
+
 int main()
 {
     Level level = Level1();
     StartLevel(level);
 
+    Screen screen = Screen();
+    MenuScene menuScene(screen);
+    LevelSelectScene levelSelectScene(screen);
+    GameScene gameScene(screen);
+
+    SceneManager instance = SceneManager::instance();
+    instance.menuScene = menuScene;
+    instance.levelSelectScene = levelSelectScene;
+    instance.gameScene = gameScene;
+
+    instance.ChangeScene(menuScene);
+
     while (true)
-    {
-        CheckForMovement();
+    {   
+        screen.ReadOutput();
+        instance.Update();
     }
     
     return 0;

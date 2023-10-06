@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "gameobject.h"
 #include "global.h"
+#include "ui.h"
 
 class Screen
 {
@@ -28,6 +29,68 @@ public:
     {
         InitScreen();
     };
+
+    void ReadOutput()
+    {
+        ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
+    }
+
+    void ClearScreen()
+    {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                buffer[i][j].Char.AsciiChar = '\0';
+                buffer[0][0].Attributes = 0;
+            }
+        }
+
+    }
+
+    void DrawMenuScreen()
+    {
+        buffer[0][0].Char.AsciiChar = 'M';
+        buffer[0][0].Attributes = 0;
+        buffer[0][1].Char.AsciiChar = 'M';
+        buffer[0][1].Attributes = 0;
+        buffer[0][2].Char.AsciiChar = 'M';
+        buffer[0][2].Attributes = 0;
+    }
+
+    void DrawButtonUnHovered(Button* button)
+    {
+        int x = button->GetX();
+        int y = button->GetY();
+
+        for (int i = 0; i < BUTTON_HEIGHT; i++)
+        {
+            for (int j = 0; j < BUTTON_HEIGHT; j++)
+            {
+                buffer[y + i][x + j].Char.AsciiChar = button -> characters[i][j];
+                buffer[y + i][x + j].Attributes = button -> colors[i][j];
+            }
+        }
+    }
+
+    void DrawButtonHovered(Button * button)
+    {
+        int x = button->GetX();
+        int y = button->GetY();
+
+        for (int i = 0; i < BUTTON_HEIGHT; i++)
+        {
+            for (int j = 0; j < BUTTON_HEIGHT; j++)
+            {
+                buffer[y + i][x + j].Attributes = 10;
+            }
+        }
+    }
+
+    void DrawLevelSelectScreen()
+    {
+
+    }
 
     void DrawSprite(Tile& tile, Sprite& sprite)
     {
