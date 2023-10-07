@@ -3,7 +3,7 @@
 #define SCREEN_WIDTH 150
 #define SCREEN_HEIGHT 150
 
-#define BUTTON_WIDTH 8
+#define BUTTON_WIDTH 3
 #define BUTTON_HEIGHT 3
 
 #define TILE_WIDTH 3

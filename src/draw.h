@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <windows.h>
+#include <string>
 #include "tile.h"
 #include "gameobject.h"
 #include "global.h"
@@ -42,20 +43,22 @@ public:
             for (int j = 0; j < SCREEN_WIDTH; j++)
             {
                 buffer[i][j].Char.AsciiChar = '\0';
-                buffer[0][0].Attributes = 0;
+                buffer[i][j].Attributes = 0;
             }
         }
 
+        UpdateScreen();
     }
 
     void DrawMenuScreen()
     {
-        buffer[0][0].Char.AsciiChar = 'M';
-        buffer[0][0].Attributes = 0;
-        buffer[0][1].Char.AsciiChar = 'M';
-        buffer[0][1].Attributes = 0;
-        buffer[0][2].Char.AsciiChar = 'M';
-        buffer[0][2].Attributes = 0;
+        string s = "press any button to continue or ESC to quit.";
+
+        for (int j = 0; j < s.length(); j ++)
+        {
+            buffer[10][j + 5].Char.AsciiChar = s[j];
+            buffer[10][j + 5].Attributes = 10;
+        }
     }
 
     void DrawButtonUnHovered(Button* button)
@@ -65,7 +68,7 @@ public:
 
         for (int i = 0; i < BUTTON_HEIGHT; i++)
         {
-            for (int j = 0; j < BUTTON_HEIGHT; j++)
+            for (int j = 0; j < BUTTON_WIDTH; j++)
             {
                 buffer[y + i][x + j].Char.AsciiChar = button -> characters[i][j];
                 buffer[y + i][x + j].Attributes = button -> colors[i][j];
@@ -80,7 +83,7 @@ public:
 
         for (int i = 0; i < BUTTON_HEIGHT; i++)
         {
-            for (int j = 0; j < BUTTON_HEIGHT; j++)
+            for (int j = 0; j < BUTTON_WIDTH; j++)
             {
                 buffer[y + i][x + j].Attributes = 10;
             }

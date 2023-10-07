@@ -6,12 +6,10 @@
 
 class Scene {
 protected :
-	Screen _screen;
+	Screen* _screen;
 
 public :
-	Scene() {}
-
-	Scene(Screen screen)
+	Scene(Screen* screen)
 	{
 		_screen = screen;
 	}
@@ -20,7 +18,7 @@ public :
 	}
 	void unload()
 	{
-		_screen.ClearScreen();
+		_screen -> ClearScreen();
 	}
 	virtual void update() {}
 	virtual void freescene() {}
@@ -29,36 +27,49 @@ public :
 class SceneManager {
 private:
 	bool canUpdate;
-	SceneManager() {
-	
+	static SceneManager* instancePtr;
+
+	SceneManager() { 
+		canUpdate = false;
+		_currentScene = nullptr;
+		menuScene = nullptr;
+		levelSelectScene = nullptr;
+		gameScene = nullptr;
 	}
 
 public:
 	Scene* _currentScene;
 	Level currentLevel;
 
-	Scene * menuScene;
+	Scene* menuScene;
 	Scene * levelSelectScene;
 	Scene * gameScene;
 
-	static SceneManager& instance()
+	static SceneManager* instance()
 	{
-		static SceneManager _instance;
-		return _instance;
-	}
-
-	void ChangeScene(Scene * newScene)
-	{
-		canUpdate = false;
-		if (_currentScene != nullptr) {
-			_currentScene->unload();
-			_currentScene = newScene;
-			_currentScene->load();
+		if (instancePtr == NULL)
+		{
+			instancePtr = new SceneManager();
+			return instancePtr;
 		}
 		else
 		{
-			_currentScene = newScene;
-			_currentScene->load();
+			return instancePtr;
+		}
+	}
+
+	void ChangeScene(Scene* newScene)
+	{
+		canUpdate = false;
+		if (_currentScene != nullptr) {
+			this -> _currentScene->unload();
+			this -> _currentScene = &(*newScene);
+			this -> _currentScene->load();
+		}
+		else
+		{
+			this -> _currentScene = &(*newScene);
+			this -> _currentScene->load();
 		}
 		canUpdate = true;
 	}
@@ -75,35 +86,35 @@ public:
 	}
 };
 
+SceneManager* SceneManager::instancePtr = NULL;
+
 class MenuScene : public Scene
 {
 private :
 
 public :
 
-	MenuScene(Screen screen) : Scene(screen) {}
+	MenuScene(Screen* screen) : Scene(screen) {}
 
 	//Gets called everyframe
 	void update() override
 	{
-		cout << "update" << endl;
-
 		char c = _getch();
 		if (c == QUIT) {
-			SceneManager sceneManager = SceneManager::instance();
-			sceneManager.QuitGame();
+			SceneManager* sceneManager = SceneManager::instance();
+			sceneManager -> QuitGame();
 		}
 		else {
-			SceneManager sceneManager = SceneManager::instance();
-			sceneManager.ChangeScene(sceneManager.levelSelectScene);
+			SceneManager* sceneManager = SceneManager::instance();
+			sceneManager -> ChangeScene(sceneManager -> levelSelectScene);
 		}
 	}
 
 	void load() override
 	{
-		_screen.DrawMenuScreen();
-		_screen.UpdateScreen();
-		cout << "loaded" << endl;
+		_screen -> DrawMenuScreen();
+		_screen -> UpdateScreen();
+
 	}
 
 	void freescene() override {}
@@ -119,53 +130,53 @@ private :
 
 public :
 
-	LevelSelectScene(Screen screen) : Scene(screen) {}
+	LevelSelectScene(Screen* screen) : Scene(screen) {}
 
 	void load() override
 	{
-		_screen.DrawButtonUnHovered(b_level_1);
-		_screen.DrawButtonUnHovered(b_level_2);
+		_screen -> DrawButtonUnHovered(b_level_1);
+		_screen -> DrawButtonUnHovered(b_level_2);
 
-		_screen.DrawLevelSelectScreen();
+		_screen -> DrawLevelSelectScreen();
 
 		currentButton = b_level_1;
-		_screen.DrawButtonHovered(currentButton);
+		_screen -> DrawButtonHovered(currentButton);
 
-		_screen.UpdateScreen();
+		_screen -> UpdateScreen();
+
 	}
 
 	//Gets called every frame
 	void update() override
 	{
-		_screen.ReadOutput();
-		LevelButton* currentButton = nullptr;
-
-		cout << "update" << endl;
+		_screen -> ReadOutput();
 
 		//Get player UI input.
 		switch (_getch()) {
 			case UP:
-				_screen.DrawButtonUnHovered(currentButton);
+				//Replace with a more advanced list of buttons system.
+				_screen -> DrawButtonUnHovered(currentButton);
 				if (currentButton == b_level_1) currentButton = b_level_2;
 				else currentButton = b_level_1;
-				_screen.DrawButtonHovered(currentButton);
+				_screen -> DrawButtonHovered(currentButton);
 
-				_screen.UpdateScreen();
+				_screen -> UpdateScreen();
 				break;
 			case DOWN:
-				_screen.DrawButtonUnHovered(currentButton);
+				//Replace with a more advanced list of buttons system.
+				_screen -> DrawButtonUnHovered(currentButton);
 				if (currentButton == b_level_1) currentButton = b_level_2;
 				else currentButton = b_level_1;
-				_screen.DrawButtonHovered(currentButton);
+				_screen -> DrawButtonHovered(currentButton);
 
-				_screen.UpdateScreen();
+				_screen -> UpdateScreen();
 				break;
 			case CONFIRM:
-				SceneManager::instance().currentLevel = currentButton->GetLevel();
-				SceneManager::instance().ChangeScene(SceneManager::instance().gameScene);
+				SceneManager::instance() -> currentLevel = currentButton->GetLevel();
+				SceneManager::instance() -> ChangeScene(SceneManager::instance() -> gameScene);
 				break;
 			case QUIT:
-				SceneManager::instance().ChangeScene(SceneManager::instance().menuScene);
+				SceneManager::instance() -> ChangeScene(SceneManager::instance() -> menuScene);
 				break;
 			default:
 				break;
@@ -188,7 +199,7 @@ private :
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
-		_screen.MoveObject(*playerPos, *newPlayerPos);
+		_screen -> MoveObject(*playerPos, *newPlayerPos);
 		newPlayerPos->object = _player;
 		playerPos->object = nullptr;
 		playerPos = newPlayerPos;
@@ -196,7 +207,7 @@ private :
 
 	void CheckForPlayerMovement()
 	{
-		Tile* newPlayerPos;
+		Tile* newPlayerPos = nullptr;
 
 		switch (_getch()) {
 		case UP:
@@ -211,29 +222,31 @@ private :
 		case LEFT:
 			newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
 			break;
+		case QUIT:
+			SceneManager::instance()->ChangeScene(SceneManager::instance()->levelSelectScene);
+			break;
 		default:
 			return;
 		}
 
-		if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
-		if (newPlayerPos->isDeadly) MovePlayer(startPos);
-		_screen.UpdateScreen();
+		if (newPlayerPos != nullptr && newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
+		if (newPlayerPos != nullptr && newPlayerPos->isDeadly) MovePlayer(startPos);
+		_screen -> UpdateScreen();
 	}
 
 public :
 
-	GameScene(Screen screen) : Scene(screen) 
+	GameScene(Screen* screen) : Scene(screen) 
 	{
 		_player = new Player();
-	}
-
-	void SetLevel(Level level)
-	{
-		_level = level;
+		startPos = nullptr;
+		playerPos = nullptr;
 	}
 
 	void load() override
 	{
+		_level = SceneManager::instance()->currentLevel;
+
 		// Build TileMap
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
 		{
@@ -262,7 +275,7 @@ public :
 				}
 
 				tileMap[make_pair(y, x)] = tile;
-				_screen.DrawSprite(*tile, tile->sprite);
+				_screen -> DrawSprite(*tile, tile->sprite);
 			}
 		}
 
@@ -272,10 +285,10 @@ public :
 		// Init Player Position
 		playerPos = startPos;
 		playerPos->object = _player;
-		_screen.DrawSprite(*playerPos, _player->sprite);
+		_screen -> DrawSprite(*playerPos, _player->sprite);
 
 		// Draw everything on screen
-		_screen.UpdateScreen();
+		_screen -> UpdateScreen();
 	}
 
 	//Gets called every frame
