@@ -85,17 +85,17 @@ public:
         {
             for (int x = 0; x < TILE_WIDTH; x++)
             {
-                sprite.characters[y][x] = 'x';
-                sprite.colors[y][x] = 10;
+                sprite.characters[y][x] = ' ';
+                sprite.colors[y][x] = 72;
             }
         }
     }
 };
 
-class DoorTile : public Tile
+class ExitTile : public Tile
 {
 public:
-    DoorTile(int y, int x) : Tile(y, x)
+    ExitTile(int y, int x) : Tile(y, x)
     {
         isWalkable = true;
         isDeadly = false;
@@ -105,8 +105,8 @@ public:
         {
             for (int x = 0; x < TILE_WIDTH; x++)
             {
-                sprite.characters[y][x] = 'd';
-                sprite.colors[y][x] = 10;
+                sprite.characters[y][x] = ' ';
+                sprite.colors[y][x] = 55;
             }
         }
     }

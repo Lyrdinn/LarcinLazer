@@ -14,8 +14,8 @@ public :
 		_screen = screen;
 	}
 
-	virtual void load() {
-	}
+	virtual void load() {}
+
 	void unload()
 	{
 		_screen -> ClearScreen();
@@ -114,7 +114,6 @@ public :
 	{
 		_screen -> DrawMenuScreen();
 		_screen -> UpdateScreen();
-
 	}
 
 	void freescene() override {}
@@ -125,7 +124,7 @@ class LevelSelectScene : public Scene
 private :
 	//Later on add all the buttons with all the levels
 	LevelButton* b_level_1 = new LevelButton(Level1(), 10, 10, 3, 5);
-	LevelButton* b_level_2 = new LevelButton(Level1(), 15, 10, 3, 5);
+	LevelButton* b_level_2 = new LevelButton(Level2(), 15, 10, 3, 5);
 	LevelButton* currentButton = nullptr;
 
 public :
@@ -260,14 +259,28 @@ public :
 				case 'w':
 					tile = new WallTile(y, x);
 					break;
-				case ' ':
-					tile = new FloorTile(y, x);
-					break;
 				case 'l':
 					tile = new LaserTile(y, x);
 					break;
+				case 'e':
+					tile = new ExitTile(y, x);
+					break;
+				case ' ':
+					tile = new FloorTile(y, x);
+					break;
+				case 'k':
+					tile = new FloorTile(y, x);
+					tile->object = new Key();
+					break;
 				case 'd':
-					tile = new DoorTile(y, x);
+					tile = new FloorTile(y, x);
+					tile->object = new Door();
+					break;
+				case 'p':
+					tile = new FloorTile(y, x);
+					startPos = tile;
+					playerPos = startPos;
+					playerPos->object = _player;
 					break;
 				default:
 					tile = new Tile(y, x);
@@ -275,17 +288,15 @@ public :
 				}
 
 				tileMap[make_pair(y, x)] = tile;
-				_screen -> DrawSprite(*tile, tile->sprite);
+
+				if (tile->object == nullptr) 
+				{
+					_screen->DrawSprite(*tile, tile->sprite);
+				}
+
+				else _screen->DrawSprite(*tile, tile->object->sprite);
 			}
 		}
-
-		// Init Start Position
-		startPos = tileMap.at(_level.startPosCoordinates);
-
-		// Init Player Position
-		playerPos = startPos;
-		playerPos->object = _player;
-		_screen -> DrawSprite(*playerPos, _player->sprite);
 
 		// Draw everything on screen
 		_screen -> UpdateScreen();
