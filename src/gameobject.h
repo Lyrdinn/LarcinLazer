@@ -14,6 +14,8 @@ public:
 class GameObject
 {
 public :
+    string name;
+
     Sprite sprite;
 };
 
@@ -22,6 +24,8 @@ class Player : public GameObject
 public:
     Player()
     {
+        name = "Player";
+
         for (int y = 0; y < TILE_HEIGHT; y++)
         {
             for (int x = 0; x < TILE_WIDTH; x++)
@@ -38,6 +42,8 @@ class Key : public GameObject
 public:
     Key()
     {
+        name = "Key";
+
         for (int y = 0; y < TILE_HEIGHT; y++)
         {
             for (int x = 0; x < TILE_WIDTH; x++)
@@ -54,6 +60,8 @@ class Door : public GameObject
 public:
     Door()
     {
+        name = "Door";
+
         for (int y = 0; y < TILE_HEIGHT; y++)
         {
             for (int x = 0; x < TILE_WIDTH; x++)

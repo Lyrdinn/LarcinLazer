@@ -16,16 +16,16 @@ int main()
     LevelSelectScene levelSelectScene =  LevelSelectScene(&screen);
     GameScene gameScene =  GameScene(&screen);
 
-    SceneManager* instance = SceneManager::instance();
-    instance -> menuScene = &menuScene;
-    instance -> levelSelectScene = &levelSelectScene;
-    instance -> gameScene = &gameScene;
+    SceneManager* Instance = SceneManager::Instance();
+    Instance -> menuScene = &menuScene;
+    Instance -> levelSelectScene = &levelSelectScene;
+    Instance -> gameScene = &gameScene;
 
-    instance -> ChangeScene(instance -> menuScene);
+    Instance -> ChangeScene(Instance -> menuScene);
 
     while (true)
     {   
-        instance -> Update();
+        Instance -> Update();
     }
     
     return 0;

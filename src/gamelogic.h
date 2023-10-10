@@ -14,79 +14,75 @@ public :
 		_screen = screen;
 	}
 
-	virtual void load() {}
+	virtual void Load() {}
 
-	void unload()
-	{
-		_screen -> ClearScreen();
-	}
-	virtual void update() {}
-	virtual void freescene() {}
+	virtual void Unload() {}
+
+	virtual void Update() {}
 };
 
 class SceneManager {
 private:
-	bool canUpdate;
-	static SceneManager* instancePtr;
+	bool _canUpdate;
+	static SceneManager* _instancePtr;
 
-	SceneManager() { 
-		canUpdate = false;
-		_currentScene = nullptr;
+	SceneManager() 
+	{ 
+		_canUpdate = false;
+		currentScene = nullptr;
 		menuScene = nullptr;
 		levelSelectScene = nullptr;
 		gameScene = nullptr;
 	}
 
 public:
-	Scene* _currentScene;
+	Scene* currentScene;
 	Level currentLevel;
 
 	Scene* menuScene;
-	Scene * levelSelectScene;
-	Scene * gameScene;
+	Scene* levelSelectScene;
+	Scene* gameScene;
 
-	static SceneManager* instance()
+	static SceneManager* Instance()
 	{
-		if (instancePtr == NULL)
+		if (_instancePtr == NULL)
 		{
-			instancePtr = new SceneManager();
-			return instancePtr;
+			_instancePtr = new SceneManager();
+			return _instancePtr;
 		}
 		else
 		{
-			return instancePtr;
+			return _instancePtr;
 		}
 	}
 
 	void ChangeScene(Scene* newScene)
 	{
-		canUpdate = false;
-		if (_currentScene != nullptr) {
-			this -> _currentScene->unload();
-			this -> _currentScene = &(*newScene);
-			this -> _currentScene->load();
-		}
-		else
+		_canUpdate = false;
+
+		if (currentScene != nullptr) 
 		{
-			this -> _currentScene = &(*newScene);
-			this -> _currentScene->load();
+			this->currentScene->Unload();
 		}
-		canUpdate = true;
+
+		this -> currentScene = &(*newScene);
+		this -> currentScene->Load();
+		_canUpdate = true;
 	}
 
 	void Update()
 	{
-		if (_currentScene != nullptr && canUpdate == true) _currentScene->update();
+		if (currentScene != nullptr && _canUpdate == true) currentScene->Update();
 	}
 
 	void QuitGame()
 	{
-		//free everything
+		// Free everything
 		exit(0);
 	}
 };
 
-SceneManager* SceneManager::instancePtr = NULL;
+SceneManager* SceneManager::_instancePtr = NULL;
 
 class MenuScene : public Scene
 {
@@ -96,33 +92,37 @@ public :
 
 	MenuScene(Screen* screen) : Scene(screen) {}
 
-	//Gets called everyframe
-	void update() override
-	{
-		char c = _getch();
-		if (c == QUIT) {
-			SceneManager* sceneManager = SceneManager::instance();
-			sceneManager -> QuitGame();
-		}
-		else {
-			SceneManager* sceneManager = SceneManager::instance();
-			sceneManager -> ChangeScene(sceneManager -> levelSelectScene);
-		}
-	}
-
-	void load() override
+	void Load() override
 	{
 		_screen -> DrawMenuScreen();
 		_screen -> UpdateScreen();
 	}
 
-	void freescene() override {}
+	void Unload() override 
+	{
+		_screen->ClearScreen();
+		// Free everything
+	}
+
+	// Gets called everyframe
+	void Update() override
+	{
+		char c = _getch();
+		if (c == QUIT) {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->QuitGame();
+		}
+		else {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->ChangeScene(sceneManager->levelSelectScene);
+		}
+	}
 };
 
 class LevelSelectScene : public Scene
 {
 private :
-	//Later on add all the buttons with all the levels
+	// Later on add all the buttons with all the levels
 	LevelButton* b_level_1 = new LevelButton(Level1(), 10, 10, 3, 5);
 	LevelButton* b_level_2 = new LevelButton(Level2(), 15, 10, 3, 5);
 	LevelButton* currentButton = nullptr;
@@ -131,7 +131,7 @@ public :
 
 	LevelSelectScene(Screen* screen) : Scene(screen) {}
 
-	void load() override
+	void Load() override
 	{
 		_screen -> DrawButtonUnHovered(b_level_1);
 		_screen -> DrawButtonUnHovered(b_level_2);
@@ -142,11 +142,16 @@ public :
 		_screen -> DrawButtonHovered(currentButton);
 
 		_screen -> UpdateScreen();
-
 	}
 
-	//Gets called every frame
-	void update() override
+	void Unload() override
+	{
+		_screen->ClearScreen();
+		// Free everything
+	}
+
+	// Gets called every frame
+	void Update() override
 	{
 		_screen -> ReadOutput();
 
@@ -171,18 +176,16 @@ public :
 				_screen -> UpdateScreen();
 				break;
 			case CONFIRM:
-				SceneManager::instance() -> currentLevel = currentButton->GetLevel();
-				SceneManager::instance() -> ChangeScene(SceneManager::instance() -> gameScene);
+				SceneManager::Instance() -> currentLevel = currentButton->GetLevel();
+				SceneManager::Instance() -> ChangeScene(SceneManager::Instance() -> gameScene);
 				break;
 			case QUIT:
-				SceneManager::instance() -> ChangeScene(SceneManager::instance() -> menuScene);
+				SceneManager::Instance() -> ChangeScene(SceneManager::Instance() -> menuScene);
 				break;
 			default:
 				break;
 		}
 	}
-
-
 };
 
 class GameScene : public Scene
@@ -191,17 +194,16 @@ private :
 	Level _level;
 	typedef map<pair<int, int>, Tile*> TileMap;
 
-	TileMap tileMap;
-	Tile* startPos;
-	Tile* playerPos;
-	Player* _player;
+	TileMap _tileMap;
+	Tile* _playerPos;
+	int _keyCount;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
-		_screen -> MoveObject(*playerPos, *newPlayerPos);
-		newPlayerPos->object = _player;
-		playerPos->object = nullptr;
-		playerPos = newPlayerPos;
+		_screen -> MoveObject(*_playerPos, *newPlayerPos);
+		newPlayerPos->object = _playerPos->object;
+		_playerPos->object = nullptr;
+		_playerPos = newPlayerPos;
 	}
 
 	void CheckForPlayerMovement()
@@ -210,41 +212,53 @@ private :
 
 		switch (_getch()) {
 		case UP:
-			newPlayerPos = tileMap.at(make_pair(playerPos->GetY() - 1, playerPos->GetX()));
+			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY() - 1, _playerPos->GetX()));
 			break;
 		case DOWN:
-			newPlayerPos = tileMap.at(make_pair(playerPos->GetY() + 1, playerPos->GetX()));
+			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY() + 1, _playerPos->GetX()));
 			break;
 		case RIGHT:
-			newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() + 1));
+			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() + 1));
 			break;
 		case LEFT:
-			newPlayerPos = tileMap.at(make_pair(playerPos->GetY(), playerPos->GetX() - 1));
+			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() - 1));
 			break;
 		case QUIT:
-			SceneManager::instance()->ChangeScene(SceneManager::instance()->levelSelectScene);
-			break;
+			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
+			return;
 		default:
 			return;
 		}
 
-		if (newPlayerPos != nullptr && newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
-		if (newPlayerPos != nullptr && newPlayerPos->isDeadly) MovePlayer(startPos);
-		_screen -> UpdateScreen();
+		GameObject* object = newPlayerPos->object;
+
+		if (object != nullptr && object->name == "Door")
+		{
+			if (_keyCount == 0) return;
+
+			delete(object);
+			_keyCount--;
+		}
+
+		if (object != nullptr && object->name == "Key")
+		{
+			delete(newPlayerPos->object);
+			_keyCount++;
+		}
+
+		if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
+		if (newPlayerPos->isDeadly) Load();
+		if (newPlayerPos->isWining) SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
 	}
 
 public :
 
-	GameScene(Screen* screen) : Scene(screen) 
-	{
-		_player = new Player();
-		startPos = nullptr;
-		playerPos = nullptr;
-	}
+	GameScene(Screen* screen) : Scene(screen) {}
 
-	void load() override
+	void Load() override
 	{
-		_level = SceneManager::instance()->currentLevel;
+		_level = SceneManager::Instance()->currentLevel;
+		_keyCount = 0;
 
 		// Build TileMap
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
@@ -278,39 +292,43 @@ public :
 					break;
 				case 'p':
 					tile = new FloorTile(y, x);
-					startPos = tile;
-					playerPos = startPos;
-					playerPos->object = _player;
+					tile->object = new Player();
+					_playerPos = tile;
 					break;
 				default:
 					tile = new Tile(y, x);
 					break;
 				}
 
-				tileMap[make_pair(y, x)] = tile;
+				_tileMap[make_pair(y, x)] = tile;
 
-				if (tile->object == nullptr) 
-				{
-					_screen->DrawSprite(*tile, tile->sprite);
-				}
+				if (tile->object == nullptr) _screen->DrawSprite(*tile, tile->sprite);
 
 				else _screen->DrawSprite(*tile, tile->object->sprite);
 			}
 		}
 
-		// Draw everything on screen
 		_screen -> UpdateScreen();
 	}
 
-	//Gets called every frame
-	void update() override
+	void Unload() override
 	{
-		//check win conditions
-		CheckForPlayerMovement();
+		_screen->ClearScreen();
+		
+		for (int y = 0; y < LEVEL_HEIGHT; y++)
+		{
+			for (int x = 0; x < LEVEL_WIDTH; x++)
+			{
+				Tile* tile = _tileMap[make_pair(y, x)];
+				if (tile->object != nullptr) delete(tile->object);
+				delete(tile);
+			}
+		}
 	}
 
-	void freescene() override
+	// Gets called every frame
+	void Update() override
 	{
-		free(_player);
+		CheckForPlayerMovement();
 	}
 };

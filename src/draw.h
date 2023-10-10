@@ -117,6 +117,9 @@ public:
 
         //Recoloring the old tile.
         DrawSprite(oldTile, oldTile.sprite);
+
+        //Update.
+        UpdateScreen();
     }
 
     void UpdateScreen()
