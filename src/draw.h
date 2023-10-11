@@ -1,9 +1,11 @@
 #pragma once
 #include <iostream>
 #include <windows.h>
+#include <string>
 #include "tile.h"
 #include "gameobject.h"
 #include "global.h"
+#include "ui.h"
 
 class Screen
 {
@@ -29,6 +31,70 @@ public:
         InitScreen();
     };
 
+    void ReadOutput()
+    {
+        ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize, dwBufferCoord, &rcRegion);
+    }
+
+    void ClearScreen()
+    {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                buffer[i][j].Char.AsciiChar = '\0';
+                buffer[i][j].Attributes = 0;
+            }
+        }
+
+        UpdateScreen();
+    }
+
+    void DrawMenuScreen()
+    {
+        string s = "press any button to continue or ESC to quit.";
+
+        for (int j = 0; j < s.length(); j ++)
+        {
+            buffer[10][j + 5].Char.AsciiChar = s[j];
+            buffer[10][j + 5].Attributes = 10;
+        }
+    }
+
+    void DrawButtonUnHovered(Button* button)
+    {
+        int x = button->GetX();
+        int y = button->GetY();
+
+        for (int i = 0; i < BUTTON_HEIGHT; i++)
+        {
+            for (int j = 0; j < BUTTON_WIDTH; j++)
+            {
+                buffer[y + i][x + j].Char.AsciiChar = button -> characters[i][j];
+                buffer[y + i][x + j].Attributes = button -> colors[i][j];
+            }
+        }
+    }
+
+    void DrawButtonHovered(Button * button)
+    {
+        int x = button->GetX();
+        int y = button->GetY();
+
+        for (int i = 0; i < BUTTON_HEIGHT; i++)
+        {
+            for (int j = 0; j < BUTTON_WIDTH; j++)
+            {
+                buffer[y + i][x + j].Attributes = 10;
+            }
+        }
+    }
+
+    void DrawLevelSelectScreen()
+    {
+
+    }
+
     void DrawSprite(Tile& tile, Sprite& sprite)
     {
         int x = tile.GetX();
@@ -51,6 +117,9 @@ public:
 
         //Recoloring the old tile.
         DrawSprite(oldTile, oldTile.sprite);
+
+        //Update.
+        UpdateScreen();
     }
 
     void UpdateScreen()
