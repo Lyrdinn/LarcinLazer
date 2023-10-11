@@ -36,7 +36,7 @@ public:
 		{ ' ', ' ', ' ', ' ', ' ', 'l' , 'e'} };
 		
 		int yOffset = 3;
-		int xOffset = 6;
+		int xOffset = 4;
 
 		for (int y = 0; y < height; y++)
 		{
@@ -65,7 +65,7 @@ public:
 		{ ' ', ' ', 'l', ' ', ' ', ' ' , ' ', ' '} };
 
 		int yOffset = 2;
-		int xOffset = 6;
+		int xOffset = 4;
 
 		for (int y = 0; y < height; y++)
 		{
@@ -93,7 +93,7 @@ public:
 		{ 'w', ' ', ' ', ' ', 'l', 'w' , ' ', ' ', 'l', 'k', 'w'} };
 
 		int yOffset = 3;
-		int xOffset = 6;
+		int xOffset = 3;
 
 		for (int y = 0; y < height; y++)
 		{

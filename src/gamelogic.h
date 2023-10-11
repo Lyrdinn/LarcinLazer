@@ -1,5 +1,7 @@
 #pragma once
 #include "draw.h"
+#include <list>
+#include <vector>
 #include "global.h"
 #include <conio.h>
 #include <map>
@@ -109,7 +111,6 @@ public :
 		// Free everything
 	}
 
-	// Gets called everyframe
 	void Update() override
 	{
 		char c = _getch();
@@ -159,7 +160,6 @@ public :
 		// Free everything
 	}
 
-	// Gets called every frame
 	void Update() override
 	{
 		_screen -> ReadOutput();
@@ -200,8 +200,10 @@ private :
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
+	vector <Tile*> lasers;
 	Tile* _playerPos;
 	int _keyCount;
+	bool firstMove;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
@@ -289,6 +291,7 @@ public :
 					break;
 				case 'l':
 					tile = new LaserTile(y, x);
+					lasers.push_back(tile);
 					break;
 				case 'e':
 					tile = new ExitTile(y, x);
@@ -322,12 +325,14 @@ public :
 			}
 		}
 
+		firstMove = true;
 		_screen -> UpdateScreen();
 	}
 
 	void Unload() override
 	{
 		_screen->ClearScreen();
+		lasers.clear();
 		
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
 		{
@@ -340,9 +345,29 @@ public :
 		}
 	}
 
-	// Gets called every frame
+	// Gets called every new input
 	void Update() override
 	{
+		//If it's our first move we want to erase the lasers
+		if (firstMove)
+		{
+			char c = _getch();
+			if (c != QUIT)
+			{
+				FloorTile ft = FloorTile(0, 0);
+
+				for (Tile* laser : lasers)
+				{
+					_screen->DrawSprite(*laser, ft.sprite);
+				}
+
+				_screen->UpdateScreen();
+				firstMove = false;
+			}
+		}
+
+		//buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = ' ';
+		//buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = 230;
 		CheckForPlayerMovement();
 	}
 };
