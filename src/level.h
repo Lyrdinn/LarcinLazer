@@ -31,12 +31,12 @@ public:
 		const int height = 3;
 
 		char smallLevel[height][width] = {
-		{ ' ', 'l', ' ', ' ', ' ', ' ' , ' '},
-		{ ' ', ' ', ' ', ' ', 'l', ' ' , 'p'},
-		{ 'e', 'l', ' ', ' ', ' ', ' ' , ' '} };
+		{ ' ', ' ', ' ', ' ', ' ', 'l' , ' '},
+		{ 'p', ' ', 'l', ' ', ' ', ' ' , ' '},
+		{ ' ', ' ', ' ', ' ', ' ', 'l' , 'e'} };
 		
 		int yOffset = 3;
-		int xOffset = 16;
+		int xOffset = 17;
 
 		for (int y = 0; y < height; y++)
 		{
@@ -64,7 +64,7 @@ public:
 		{ ' ', ' ', 'l', ' ', ' ', 'l' , ' ', 'k'},
 		{ ' ', ' ', 'l', ' ', ' ', ' ' , ' ', ' '} };
 
-		int yOffset = 3;
+		int yOffset = 2;
 		int xOffset = 16;
 
 		for (int y = 0; y < height; y++)
@@ -77,5 +77,40 @@ public:
 	}
 };
 
+class Level3 : public Level
+{
+public:
 
+	Level3() : Level()
+	{
+		const int width = 11;
+		const int height = 4;
 
+		char smallLevel[height][width] = {
+		{ 'e', 'd', ' ', ' ', ' ', 'd' , ' ', ' ', ' ', ' ', 'p'},
+		{ 'w', 'w', 'l', ' ', 'w', 'w' , 'w', ' ', 'l', 'w', 'w'},
+		{ 'w', 'k', 'l', ' ', ' ', 'w' , 'l', ' ', ' ', ' ', 'w'},
+		{ 'w', ' ', ' ', ' ', 'l', 'w' , ' ', ' ', 'l', 'k', 'w'} };
+
+		int yOffset = 3;
+		int xOffset = 15;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				map[yOffset + y][xOffset + x] = smallLevel[y][x];
+			}
+		}
+	}
+};
+
+// Empty Template 
+/*
+char smallLevel[height][width] = {
+{ ' ', ' ', ' ', ' ', ' ', ' ' , ' ', ' '},
+{ ' ', ' ', ' ', ' ', ' ', ' ' , ' ', ' '},
+{ ' ', ' ', ' ', ' ', ' ', ' ' , ' ', ' '},
+{ ' ', ' ', ' ', ' ', ' ', ' ' , ' ', ' '},
+{ ' ', ' ', ' ', ' ', ' ', ' ' , ' ', ' '} };
+*/

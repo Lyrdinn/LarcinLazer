@@ -70,6 +70,11 @@ public:
 		_canUpdate = true;
 	}
 
+	void RestartScene() 
+	{
+		ChangeScene(currentScene);
+	}
+
 	void Update()
 	{
 		if (currentScene != nullptr && _canUpdate == true) currentScene->Update();
@@ -123,9 +128,8 @@ class LevelSelectScene : public Scene
 {
 private :
 	// Later on add all the buttons with all the levels
-	LevelButton* b_level_1 = new LevelButton(Level1(), 10, 10, 3, 5);
-	LevelButton* b_level_2 = new LevelButton(Level2(), 15, 10, 3, 5);
-	LevelButton* currentButton = nullptr;
+	vector<LevelButton*> buttons;
+	int _currentButtonIndex;
 
 public :
 
@@ -133,13 +137,18 @@ public :
 
 	void Load() override
 	{
-		_screen -> DrawButtonUnHovered(b_level_1);
-		_screen -> DrawButtonUnHovered(b_level_2);
+		buttons.push_back(new LevelButton(Level1(), 5, 5));
+		buttons.push_back(new LevelButton(Level2(), 5, 10));
+		buttons.push_back(new LevelButton(Level3(), 5, 15));
+
+		for (LevelButton* button : buttons)
+		{
+			_screen->DrawButtonUnHovered(button);
+		}
 
 		_screen -> DrawLevelSelectScreen();
-
-		currentButton = b_level_1;
-		_screen -> DrawButtonHovered(currentButton);
+		_screen -> DrawButtonHovered(buttons[0]);
+		_currentButtonIndex = 0;
 
 		_screen -> UpdateScreen();
 	}
@@ -158,25 +167,21 @@ public :
 		//Get player UI input.
 		switch (_getch()) {
 			case UP:
-				//Replace with a more advanced list of buttons system.
-				_screen -> DrawButtonUnHovered(currentButton);
-				if (currentButton == b_level_1) currentButton = b_level_2;
-				else currentButton = b_level_1;
-				_screen -> DrawButtonHovered(currentButton);
-
+				_screen -> DrawButtonUnHovered(buttons[_currentButtonIndex]);
+				_currentButtonIndex--;
+				if (_currentButtonIndex == -1) _currentButtonIndex = buttons.size() - 1;
+				_screen -> DrawButtonHovered(buttons[_currentButtonIndex]);
 				_screen -> UpdateScreen();
 				break;
 			case DOWN:
-				//Replace with a more advanced list of buttons system.
-				_screen -> DrawButtonUnHovered(currentButton);
-				if (currentButton == b_level_1) currentButton = b_level_2;
-				else currentButton = b_level_1;
-				_screen -> DrawButtonHovered(currentButton);
-
-				_screen -> UpdateScreen();
+				_screen->DrawButtonUnHovered(buttons[_currentButtonIndex]);
+				_currentButtonIndex++;
+				if (_currentButtonIndex == buttons.size()) _currentButtonIndex = 0;
+				_screen->DrawButtonHovered(buttons[_currentButtonIndex]);
+				_screen->UpdateScreen();
 				break;
 			case CONFIRM:
-				SceneManager::Instance() -> currentLevel = currentButton->GetLevel();
+				SceneManager::Instance() -> currentLevel = buttons[_currentButtonIndex]->GetLevel();
 				SceneManager::Instance() -> ChangeScene(SceneManager::Instance() -> gameScene);
 				break;
 			case QUIT:
@@ -242,13 +247,22 @@ private :
 
 		if (object != nullptr && object->name == "Key")
 		{
-			delete(newPlayerPos->object);
+			delete(object);
 			_keyCount++;
 		}
 
+		if (newPlayerPos->isDeadly) 
+		{
+			SceneManager::Instance()->RestartScene();
+			return;
+		}
+		if (newPlayerPos->isWining) 
+		{
+			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
+			return;
+		}
+
 		if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
-		if (newPlayerPos->isDeadly) Load();
-		if (newPlayerPos->isWining) SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
 	}
 
 public :
