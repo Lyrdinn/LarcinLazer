@@ -142,6 +142,7 @@ public :
 		buttons.push_back(new LevelButton(Level2(), 5, 10));
 		buttons.push_back(new LevelButton(Level3(), 5, 15));
 		buttons.push_back(new LevelButton(Level4(), 5, 20));
+		buttons.push_back(new LevelButton(Level5(), 5, 25));
 
 		for (LevelButton* button : buttons)
 		{
@@ -201,11 +202,11 @@ private :
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
-	vector <Tile*> lasers;
+	vector <Tile*> _lasers;
 	Tile* _playerPos;
-	Player* player;
-	int playerDir;
-	bool firstMove;
+	Player* _player;
+	int _playerDir;
+	bool _firstMove;
 	int _keyCount;
 
 	void MovePlayer(Tile* newPlayerPos)
@@ -233,16 +234,16 @@ private :
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY() + 1, _playerPos->GetX()));
 			break;
 		case RIGHT:
-			if (playerDir == -1) {
-				playerDir = 1;
-				player->FlipSprite();
+			if (_playerDir == -1) {
+				_playerDir = 1;
+				_player->FlipSprite();
 			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() + 1));
 			break;
 		case LEFT:
-			if (playerDir == 1) {
-				playerDir = -1;
-				player->FlipSprite();
+			if (_playerDir == 1) {
+				_playerDir = -1;
+				_player->FlipSprite();
 			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() - 1));
 			break;
@@ -298,7 +299,7 @@ public :
 	{
 		_level = SceneManager::Instance()->currentLevel;
 		_keyCount = 0;
-		firstMove = true;
+		_firstMove = true;
 
 		PortalTile* firstPortalOfPair[10]{ nullptr };
 
@@ -317,7 +318,7 @@ public :
 					break;
 				case 'l':
 					tile = new LaserTile(y, x);
-					lasers.push_back(tile);
+					_lasers.push_back(tile);
 					break;
 				case 'e':
 					tile = new ExitTile(y, x);
@@ -335,12 +336,12 @@ public :
 					break;
 				case 'p':
 					tile = new FloorTile(y, x);
-					player = new Player();
-					tile->object = player;
+					_player = new Player();
+					tile->object = _player;
 					_playerPos = tile;
 
-					playerDir = _level.playerStartDir;
-					if (playerDir == -1) player->FlipSprite();
+					_playerDir = _level.playerStartDir;
+					if (_playerDir == -1) _player->FlipSprite();
 					break;
 				default:
 					if (!isdigit(tileType)) break;
@@ -375,7 +376,7 @@ public :
 	void Unload() override
 	{
 		_screen->ClearScreen();
-		lasers.clear();
+		_lasers.clear();
 		
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
 		{
@@ -392,20 +393,20 @@ public :
 	void Update() override
 	{
 		//If it's our first move we want to erase the lasers
-		if (firstMove)
+		if (_firstMove)
 		{
 			char c = _getch();
 			if (c != QUIT)
 			{
 				FloorTile ft = FloorTile(0, 0);
 
-				for (Tile* laser : lasers)
+				for (Tile* laser : _lasers)
 				{
 					_screen->DrawSprite(*laser, ft.sprite);
 				}
 
 				_screen->UpdateScreen();
-				firstMove = false;
+				_firstMove = false;
 			}
 		}
 
