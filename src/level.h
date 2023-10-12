@@ -1,13 +1,15 @@
 #pragma once
 #include <Windows.h>
 #include <vector>
+#include <map>
 #include "global.h"
 using namespace std;
 
 class Level
 {
 public:
-	char map[LEVEL_HEIGHT][LEVEL_WIDTH];
+	char lvlMap[LEVEL_HEIGHT][LEVEL_WIDTH];
+	int playerStartDir; //Direction at which the player starts
 
 	Level()
 	{
@@ -15,7 +17,7 @@ public:
 		{
 			for (int x = 0; x < LEVEL_WIDTH; x++)
 			{
-				map[y][x] = 'w';
+				lvlMap[y][x] = 'w';
 			}
 		}
 	}
@@ -27,6 +29,7 @@ public:
 
 	Level1() : Level()
 	{
+		playerStartDir = 1;
 		const int width = 7;
 		const int height = 3;
 
@@ -42,7 +45,7 @@ public:
 		{
 			for (int x = 0; x < width; x++)
 			{
-				map[yOffset + y][xOffset + x] = smallLevel[y][x];
+				lvlMap[yOffset + y][xOffset + x] = smallLevel[y][x];
 			}
 		}
 	}
@@ -54,6 +57,7 @@ public:
 
 	Level2() : Level()
 	{
+		playerStartDir = 1;
 		const int width = 8;
 		const int height = 5;
 
@@ -71,7 +75,7 @@ public:
 		{
 			for (int x = 0; x < width; x++)
 			{
-				map[yOffset + y][xOffset + x] = smallLevel[y][x];
+				lvlMap[yOffset + y][xOffset + x] = smallLevel[y][x];
 			}
 		}
 	}
@@ -83,6 +87,7 @@ public:
 
 	Level3() : Level()
 	{
+		playerStartDir = -1;
 		const int width = 11;
 		const int height = 4;
 
@@ -99,7 +104,35 @@ public:
 		{
 			for (int x = 0; x < width; x++)
 			{
-				map[yOffset + y][xOffset + x] = smallLevel[y][x];
+				lvlMap[yOffset + y][xOffset + x] = smallLevel[y][x];
+			}
+		}
+	}
+};
+
+class Level4 : public Level
+{
+public:
+
+	Level4() : Level()
+	{
+		playerStartDir = -1;
+		const int width = 9;
+		const int height = 3;
+
+		char smallLevel[height][width] = {
+		{ 'e', ' ', ' ', 'w', 'w' , 'w', '0', 'l', 'p'},
+		{ ' ', 'l', ' ', 'w', 'w' , 'w', ' ', ' ', ' '},
+		{ ' ', ' ', '0', 'w', 'w' , 'w', 'l', ' ', 'l'} };
+
+		int yOffset = 3;
+		int xOffset = 3;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				lvlMap[yOffset + y][xOffset + x] = smallLevel[y][x];
 			}
 		}
 	}

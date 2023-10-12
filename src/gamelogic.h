@@ -141,6 +141,7 @@ public :
 		buttons.push_back(new LevelButton(Level1(), 5, 5));
 		buttons.push_back(new LevelButton(Level2(), 5, 10));
 		buttons.push_back(new LevelButton(Level3(), 5, 15));
+		buttons.push_back(new LevelButton(Level4(), 5, 20));
 
 		for (LevelButton* button : buttons)
 		{
@@ -200,13 +201,21 @@ private :
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
+	vector <PortalTile*> portals;
 	vector <Tile*> lasers;
 	Tile* _playerPos;
+	Player* player;
 	int _keyCount;
 	bool firstMove;
+	int playerDir;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
+		if (newPlayerPos->isPortal)
+		{
+			//Go to the new position
+		}
+
 		_screen -> MoveObject(*_playerPos, *newPlayerPos);
 		newPlayerPos->object = _playerPos->object;
 		_playerPos->object = nullptr;
@@ -225,9 +234,17 @@ private :
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY() + 1, _playerPos->GetX()));
 			break;
 		case RIGHT:
+			if (playerDir == -1) {
+				playerDir = 1;
+				player->FlipSprite();
+			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() + 1));
 			break;
 		case LEFT:
+			if (playerDir == 1) {
+				playerDir = -1;
+				player->FlipSprite();
+			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() - 1));
 			break;
 		case QUIT:
@@ -281,7 +298,7 @@ public :
 		{
 			for (int x = 0; x < LEVEL_WIDTH; x++)
 			{
-				char tileType = _level.map[y][x];
+				char tileType = _level.lvlMap[y][x];
 
 				Tile* tile;
 
@@ -309,11 +326,22 @@ public :
 					break;
 				case 'p':
 					tile = new FloorTile(y, x);
-					tile->object = new Player();
+					player = new Player();
+					tile->object = player;
 					_playerPos = tile;
+
+					playerDir = _level.playerStartDir;
+					if (playerDir == -1) player->FlipSprite();
 					break;
 				default:
-					tile = new Tile(y, x);
+					//if it's a digit then we create a portal tile of said digit.
+					if (isdigit(tileType))
+					{
+						tile = new PortalTile(y, x);
+						static_cast<PortalTile*> (tile) -> portal_nb = (int) tileType;
+						portals.push_back(static_cast<PortalTile*> (tile));
+					}
+					else tile = new Tile(y, x);
 					break;
 				}
 
@@ -366,8 +394,6 @@ public :
 			}
 		}
 
-		//buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Char.AsciiChar = ' ';
-		//buffer[y * TILE_HEIGHT + i][x * TILE_WIDTH + j].Attributes = 230;
 		CheckForPlayerMovement();
 	}
 };
