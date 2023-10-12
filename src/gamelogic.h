@@ -201,13 +201,12 @@ private :
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
-	vector <PortalTile*> portals;
 	vector <Tile*> lasers;
 	Tile* _playerPos;
 	Player* player;
-	int _keyCount;
-	bool firstMove;
 	int playerDir;
+	bool firstMove;
+	int _keyCount;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
@@ -275,9 +274,16 @@ private :
 			SceneManager::Instance()->RestartScene();
 			return;
 		}
+
 		if (newPlayerPos->isWining) 
 		{
 			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
+			return;
+		}
+
+		if (newPlayerPos->isPortal)
+		{
+			MovePlayer(((PortalTile*)newPlayerPos)->partner);
 			return;
 		}
 
@@ -292,6 +298,9 @@ public :
 	{
 		_level = SceneManager::Instance()->currentLevel;
 		_keyCount = 0;
+		firstMove = true;
+
+		PortalTile* firstPortalOfPair[10]{ nullptr };
 
 		// Build TileMap
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
@@ -300,7 +309,7 @@ public :
 			{
 				char tileType = _level.lvlMap[y][x];
 
-				Tile* tile;
+				Tile* tile = nullptr;
 
 				switch (tileType) {
 				case 'w':
@@ -334,15 +343,22 @@ public :
 					if (playerDir == -1) player->FlipSprite();
 					break;
 				default:
-					//if it's a digit then we create a portal tile of said digit.
-					if (isdigit(tileType))
+					if (!isdigit(tileType)) break;
+
+					PortalTile* portalTile = new PortalTile(y, x);
+					tile = portalTile;
+					int index = (tileType - '0');
+
+					if (firstPortalOfPair[index] == nullptr)
 					{
-						tile = new PortalTile(y, x);
-						static_cast<PortalTile*> (tile) -> portal_nb = (int) tileType;
-						portals.push_back(static_cast<PortalTile*> (tile));
+						firstPortalOfPair[index] = portalTile;
 					}
-					else tile = new Tile(y, x);
-					break;
+
+					else
+					{
+						firstPortalOfPair[index]->partner = portalTile;
+						portalTile->partner = firstPortalOfPair[index];
+					}
 				}
 
 				_tileMap[make_pair(y, x)] = tile;
@@ -353,7 +369,6 @@ public :
 			}
 		}
 
-		firstMove = true;
 		_screen -> UpdateScreen();
 	}
 

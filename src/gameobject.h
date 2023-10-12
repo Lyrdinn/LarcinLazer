@@ -28,14 +28,14 @@ public:
     {
         name = "Player";
 
-        sprite.colors[0] = { 100,100,100,2,2,100,100,100 };
-        sprite.colors[1] = { 100,100,2,2,2,100,100,100 };
-        sprite.colors[2] = { 2,100,100,2,2,100,100,100 };
-        sprite.colors[3] = { 2,2,2,2,2,2,2,100 };
-        sprite.colors[4] = { 100,100,100,2,2,100,2,100 };
-        sprite.colors[5] = { 100,100,100,2,2,100,100,2 };
-        sprite.colors[6] = { 100,100,2,100,100,2,2,100 };
-        sprite.colors[7] = { 100,2,2,100,100,100,100,100 };
+        sprite.colors[0] = { YELLOW,YELLOW,YELLOW,BLACK,BLACK,YELLOW,YELLOW,YELLOW };
+        sprite.colors[1] = { YELLOW,YELLOW,BLACK,BLACK,BLACK,YELLOW,YELLOW,YELLOW };
+        sprite.colors[2] = { BLACK,YELLOW,YELLOW,BLACK,BLACK,YELLOW,YELLOW,YELLOW };
+        sprite.colors[3] = { BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,YELLOW };
+        sprite.colors[4] = { YELLOW,YELLOW,YELLOW,BLACK,BLACK,YELLOW,BLACK,YELLOW };
+        sprite.colors[5] = { YELLOW,YELLOW,YELLOW,BLACK,BLACK,YELLOW,YELLOW,BLACK };
+        sprite.colors[6] = { YELLOW,YELLOW,BLACK,YELLOW,YELLOW,BLACK,BLACK,YELLOW };
+        sprite.colors[7] = { YELLOW,BLACK,BLACK,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
 
         FlipSprite();
 
@@ -68,14 +68,14 @@ public:
     {
         name = "Key";
 
-        sprite.colors[0] = { 100,100,100,100,100,100,100,100 };
-        sprite.colors[1] = { 100,100,100,100,100,100,100,100 };
-        sprite.colors[2] = { 100,255,255,100,100,100,100,100 };
-        sprite.colors[3] = { 255,100,100,255,255,255,255,255 };
-        sprite.colors[4] = { 255,100,100,255,100,255,100,255 };
-        sprite.colors[5] = { 100,255,255,100,100,100,100,100 };
-        sprite.colors[6] = { 100,100,100,100,100,100,100,100 };
-        sprite.colors[7] = { 100,100,100,100,100,100,100,100 };
+        sprite.colors[0] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
+        sprite.colors[1] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
+        sprite.colors[2] = { YELLOW,WHITE,WHITE,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
+        sprite.colors[3] = { WHITE,YELLOW,YELLOW,WHITE,WHITE,WHITE,WHITE,WHITE };
+        sprite.colors[4] = { WHITE,YELLOW,YELLOW,WHITE,YELLOW,WHITE,YELLOW,WHITE };
+        sprite.colors[5] = { YELLOW,WHITE,WHITE,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
+        sprite.colors[6] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
+        sprite.colors[7] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
 
         for (int y = 0; y < TILE_HEIGHT; y++)
         {
@@ -94,14 +94,14 @@ public:
     {
         name = "Door";
 
-        sprite.colors[0] = { 100,100,2,2,2,2,100,100 };
-        sprite.colors[1] = { 100,2,100,100,100,100,2,100 };
-        sprite.colors[2] = { 100,2,100,100,100,100,2,100 };
-        sprite.colors[3] = { 2,2,2,2,2,2,2,2 };
-        sprite.colors[4] = { 2,2,2,100,100,2,2,2 };
-        sprite.colors[5] = { 2,2,2,100,100,2,2,2 };
-        sprite.colors[6] = { 2,2,100,2,2,100,2,2 };
-        sprite.colors[7] = { 2,2,2,2,2,2,2,2 };
+        sprite.colors[0] = { YELLOW,YELLOW,BLACK,BLACK,BLACK,BLACK,YELLOW,YELLOW };
+        sprite.colors[1] = { YELLOW,BLACK,YELLOW,YELLOW,YELLOW,YELLOW,BLACK,YELLOW };
+        sprite.colors[2] = { YELLOW,BLACK,YELLOW,YELLOW,YELLOW,YELLOW,BLACK,YELLOW };
+        sprite.colors[3] = { BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK };
+        sprite.colors[4] = { BLACK,BLACK,BLACK,YELLOW,YELLOW,BLACK,BLACK,BLACK };
+        sprite.colors[5] = { BLACK,BLACK,BLACK,YELLOW,YELLOW,BLACK,BLACK,BLACK };
+        sprite.colors[6] = { BLACK,BLACK,YELLOW,BLACK,BLACK,YELLOW,BLACK,BLACK };
+        sprite.colors[7] = { BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK };
 
         for (int y = 0; y < TILE_HEIGHT; y++)
         {

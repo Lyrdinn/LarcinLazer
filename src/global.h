@@ -19,3 +19,9 @@
 #define CONFIRM 'u'
 #define CANCEL 'o'
 #define QUIT 27 //escape key
+
+#define BLACK 2
+#define WHITE 255
+#define YELLOW 100
+#define RED 72
+
