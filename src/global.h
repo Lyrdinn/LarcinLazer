@@ -20,8 +20,8 @@
 #define CANCEL 'o'
 #define QUIT 27 //escape key
 
-#define B 20
-#define W 255
-#define Y 100
-#define R 72
-
+#define BLA 10  // Black
+#define WHI 255 // White
+#define YEL 100 // Yellow
+#define RED 72  // Red
+#define BEI 230 // Beige

@@ -60,7 +60,7 @@ public:
             for (int i = 0; i < SCREEN_WIDTH; i++)
             {
                 buffer[j][i].Char.AsciiChar = ' ';
-                buffer[j][i].Attributes = Y;
+                buffer[j][i].Attributes = YEL;
             }
         }
 
@@ -69,11 +69,11 @@ public:
             for (int i = 20; i < 100; i++)
             {
                 buffer[j][i].Char.AsciiChar = ' ';
-                buffer[j][i].Attributes = B;
+                buffer[j][i].Attributes = BLA;
             }
         }
         
-        //buffer[12] = {B,W,B,W,W,W,W,B,B,0,0,0,0,B,B,W,W,W,W,W,W,W,W,W,B,B,B,B,W,W,W,W,W,W,W,W,B,B,B,0,0,B,B,W,W,W,W,W,W,W,W,W,B,B,B,B,W,W,W,W,B,B,B,B,W,W,W,W,B,B,0,B,W,W}
+        //buffer[12] = {BLA,WHI,BLA,WHI,WHI,WHI,WHI,BLA,BLA,0,0,0,0,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,0,0,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,BLA,BLA,0,BLA,WHI,WHI}
     }
 
     void DrawButtonUnHovered(Button* button)

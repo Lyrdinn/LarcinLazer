@@ -11,7 +11,7 @@ private:
 public:
     bool isWalkable, isDeadly, isWining, isPortal = false;
 
-    Sprite sprite = Sprite();
+    Sprite sprite;
 
     GameObject* object = nullptr;
 
@@ -42,14 +42,7 @@ public:
         isWining = false;
         isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = YELLOW;
-            }
-        }
+        sprite = Sprite(YEL);
     }
 };
 
@@ -63,14 +56,7 @@ public:
         isWining = false;
         isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = BLACK;
-            }
-        }
+        sprite = Sprite(BLA);
     }
 };
 
@@ -84,22 +70,14 @@ public:
         isWining = false;
         isPortal = false;
 
-        sprite.colors[0] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
-        sprite.colors[1] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
+        sprite.colors[0] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[1] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
         sprite.colors[2] = { RED,RED,RED,RED,RED,RED,RED,RED };
-        sprite.colors[3] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
-        sprite.colors[4] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
+        sprite.colors[3] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[4] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
         sprite.colors[5] = { RED,RED,RED,RED,RED,RED,RED,RED };
-        sprite.colors[6] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
-        sprite.colors[7] = { YELLOW,RED,YELLOW,RED,RED,YELLOW,RED,YELLOW };
-
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-            }
-        }
+        sprite.colors[6] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[7] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
     }
 };
 
@@ -115,22 +93,14 @@ public :
         isWining = false;
         isPortal = true;
 
-        sprite.colors[0] = { BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK };
-        sprite.colors[1] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[2] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[3] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[4] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[5] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[6] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[7] = { BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK };
-
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-            }
-        }
+        sprite.colors[0] = { BLA,BLA,BLA,BLA,BLA,BLA,BLA,BLA };
+        sprite.colors[1] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[2] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[3] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[4] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[5] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[6] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[7] = { BLA,BLA,BLA,BLA,BLA,BLA,BLA,BLA };
     }
 };
 
@@ -144,21 +114,13 @@ public:
         isWining = true;
         isPortal = false;
 
-        sprite.colors[0] = { YELLOW,YELLOW,YELLOW,WHITE,WHITE,YELLOW,YELLOW,YELLOW };
-        sprite.colors[1] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[2] = { YELLOW,YELLOW,WHITE,WHITE,WHITE,WHITE,YELLOW,YELLOW };
-        sprite.colors[3] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[4] = { WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE };
-        sprite.colors[5] = { YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW,YELLOW };
-        sprite.colors[6] = { WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE };
-        sprite.colors[7] = { WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE };
-
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-            }
-        }
+        sprite.colors[0] = { YEL,YEL,YEL,WHI,WHI,YEL,YEL,YEL };
+        sprite.colors[1] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[2] = { YEL,YEL,WHI,WHI,WHI,WHI,YEL,YEL };
+        sprite.colors[3] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[4] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[5] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[6] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[7] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
     }
 };

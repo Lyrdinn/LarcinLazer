@@ -288,7 +288,11 @@ private :
 			return;
 		}
 
-		if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
+		if (newPlayerPos->isWalkable) 
+		{
+			_playerPos->sprite = Sprite(BEI);
+			MovePlayer(newPlayerPos);
+		}
 	}
 
 public :
