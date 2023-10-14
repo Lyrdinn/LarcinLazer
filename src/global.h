@@ -1,7 +1,7 @@
 #pragma once
 
-#define SCREEN_WIDTH 200
-#define SCREEN_HEIGHT 150
+#define SCREEN_WIDTH 120
+#define SCREEN_HEIGHT 80
 
 #define BUTTON_WIDTH 3
 #define BUTTON_HEIGHT 3
@@ -20,8 +20,8 @@
 #define CANCEL 'o'
 #define QUIT 27 //escape key
 
-#define BLACK 2
-#define WHITE 255
-#define YELLOW 100
-#define RED 72
+#define B 20
+#define W 255
+#define Y 100
+#define R 72
 

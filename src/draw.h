@@ -1,11 +1,14 @@
 #pragma once
 #include <iostream>
+#include <iostream>
 #include <windows.h>
 #include <string>
 #include "tile.h"
 #include "gameobject.h"
 #include "global.h"
 #include "ui.h"
+
+using namespace std;
 
 class Screen
 {
@@ -52,13 +55,25 @@ public:
 
     void DrawMenuScreen()
     {
-        string s = "press any button to continue or ESC to quit.";
-
-        for (int j = 0; j < s.length(); j ++)
+        for (int j = 0; j < SCREEN_HEIGHT; j++)
         {
-            buffer[10][j + 5].Char.AsciiChar = s[j];
-            buffer[10][j + 5].Attributes = 10;
+            for (int i = 0; i < SCREEN_WIDTH; i++)
+            {
+                buffer[j][i].Char.AsciiChar = ' ';
+                buffer[j][i].Attributes = Y;
+            }
         }
+
+        for (int j = 10; j < 50; j++)
+        {
+            for (int i = 20; i < 100; i++)
+            {
+                buffer[j][i].Char.AsciiChar = ' ';
+                buffer[j][i].Attributes = B;
+            }
+        }
+        
+        //buffer[12] = {B,W,B,W,W,W,W,B,B,0,0,0,0,B,B,W,W,W,W,W,W,W,W,W,B,B,B,B,W,W,W,W,W,W,W,W,B,B,B,0,0,B,B,W,W,W,W,W,W,W,W,W,B,B,B,B,W,W,W,W,B,B,B,B,W,W,W,W,B,B,0,B,W,W}
     }
 
     void DrawButtonUnHovered(Button* button)
