@@ -7,6 +7,7 @@
 #include "gameobject.h"
 #include "global.h"
 #include "ui.h"
+#include <fstream>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ private:
     SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
     CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+    CHAR_INFO menuImage[SCREEN_HEIGHT][SCREEN_WIDTH];
 
     void InitScreen()
     {
@@ -32,6 +34,7 @@ public:
     Screen()
     {
         InitScreen();
+        LoadMenuScreenImage();
     };
 
     void ReadOutput()
@@ -51,6 +54,38 @@ public:
         }
 
         UpdateScreen();
+    }
+
+    void LoadMenuScreenImage()
+    {
+        fstream myfile;
+        myfile.open("logo.txt", ios::in);
+
+        if (!myfile) {
+            cout << "Can't find file";
+        }
+        else {
+            char ch;
+            int i = 21;
+            int j = 11;
+            bool negative = false;
+
+            while (1) {
+                myfile >> ch;
+
+                if (myfile.eof()) break;
+                else if (ch == '\n') {
+                    j++;
+                    i = 21;
+                }
+                else if (isdigit(ch)) {
+                    if (ch == '0') menuImage[j][i].Attributes = 0;
+                    else if (ch == '1') menuImage[j][i].Attributes = WHI;
+                    else if (ch == '2') menuImage[j][i].Attributes = BLA;
+                    i++;
+                }
+            }
+        }
     }
 
     void DrawMenuScreen()
