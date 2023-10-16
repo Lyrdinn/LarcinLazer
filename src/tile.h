@@ -9,9 +9,9 @@ private:
     int _y, _x;
 
 public:
-    bool isWalkable, isDeadly, isWining = false;
+    bool isWalkable, isDeadly, isWining, isPortal = false;
 
-    Sprite sprite = Sprite();
+    Sprite sprite;
 
     GameObject* object = nullptr;
 
@@ -40,15 +40,9 @@ public:
         isWalkable = true;
         isDeadly = false;
         isWining = false;
+        isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = 230;
-            }
-        }
+        sprite = Sprite(YEL);
     }
 };
 
@@ -60,15 +54,9 @@ public:
         isWalkable = false;
         isDeadly = false;
         isWining = false;
+        isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = 100;
-            }
-        }
+        sprite = Sprite(BLA);
     }
 };
 
@@ -80,15 +68,39 @@ public:
         isWalkable = true;
         isDeadly = true;
         isWining = false;
+        isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = 72;
-            }
-        }
+        sprite.colors[0] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[1] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[2] = { RED,RED,RED,RED,RED,RED,RED,RED };
+        sprite.colors[3] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[4] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[5] = { RED,RED,RED,RED,RED,RED,RED,RED };
+        sprite.colors[6] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+        sprite.colors[7] = { YEL,RED,YEL,RED,RED,YEL,RED,YEL };
+    }
+};
+
+class PortalTile : public Tile
+{
+public :
+    PortalTile* partner = nullptr;
+
+    PortalTile(int y, int x) : Tile(y, x)
+    {
+        isWalkable = true;
+        isDeadly = false;
+        isWining = false;
+        isPortal = true;
+
+        sprite.colors[0] = { BLU,BLU,BLU,BLU,BLU,BLU,BLU,BLU };
+        sprite.colors[1] = { BLU,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[2] = { BLU,YEL,BLU,BLU,BLU,BLU,BLU,BLU };
+        sprite.colors[3] = { BLU,YEL,BLU,YEL,YEL,YEL,YEL,BLU };
+        sprite.colors[4] = { BLU,YEL,BLU,YEL,YEL,BLU,YEL,BLU };
+        sprite.colors[5] = { BLU,YEL,BLU,BLU,BLU,BLU,YEL,BLU };
+        sprite.colors[6] = { BLU,YEL,YEL,YEL,YEL,YEL,YEL,BLU };
+        sprite.colors[7] = { BLU,BLU,BLU,BLU,BLU,BLU,BLU,BLU };
     }
 };
 
@@ -100,14 +112,15 @@ public:
         isWalkable = true;
         isDeadly = false;
         isWining = true;
+        isPortal = false;
 
-        for (int y = 0; y < TILE_HEIGHT; y++)
-        {
-            for (int x = 0; x < TILE_WIDTH; x++)
-            {
-                sprite.characters[y][x] = ' ';
-                sprite.colors[y][x] = 55;
-            }
-        }
+        sprite.colors[0] = { YEL,YEL,YEL,WHI,WHI,YEL,YEL,YEL };
+        sprite.colors[1] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[2] = { YEL,YEL,WHI,WHI,WHI,WHI,YEL,YEL };
+        sprite.colors[3] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[4] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[5] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[6] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[7] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
     }
 };

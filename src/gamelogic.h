@@ -1,8 +1,11 @@
 #pragma once
 #include "draw.h"
+#include <list>
+#include <vector>
 #include "global.h"
 #include <conio.h>
 #include <map>
+#include <array>
 
 class Scene {
 protected :
@@ -103,13 +106,11 @@ public :
 		_screen -> UpdateScreen();
 	}
 
-	void Unload() override 
+	void Unload() override
 	{
 		_screen->ClearScreen();
-		// Free everything
 	}
 
-	// Gets called everyframe
 	void Update() override
 	{
 		char c = _getch();
@@ -137,16 +138,20 @@ public :
 
 	void Load() override
 	{
-		buttons.push_back(new LevelButton(Level1(), 5, 5));
-		buttons.push_back(new LevelButton(Level2(), 5, 10));
-		buttons.push_back(new LevelButton(Level3(), 5, 15));
+		_screen->DrawLevelSelectScreen();
 
+		buttons.push_back(new Level1Button(Level1(), 30, 10));
+		buttons.push_back(new Level2Button(Level2(), 30, 20));
+		buttons.push_back(new Level3Button(Level3(), 30, 30));
+		buttons.push_back(new Level4Button(Level4(), 30, 40));
+		buttons.push_back(new Level5Button(Level5(), 30, 50));
+		buttons.push_back(new Level6Button(Level6(), 30, 60));
+		
 		for (LevelButton* button : buttons)
 		{
 			_screen->DrawButtonUnHovered(button);
 		}
 
-		_screen -> DrawLevelSelectScreen();
 		_screen -> DrawButtonHovered(buttons[0]);
 		_currentButtonIndex = 0;
 
@@ -159,7 +164,6 @@ public :
 		// Free everything
 	}
 
-	// Gets called every frame
 	void Update() override
 	{
 		_screen -> ReadOutput();
@@ -200,11 +204,20 @@ private :
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
+	vector <Tile*> _lasers;
 	Tile* _playerPos;
+	Player* _player;
+	int _playerDir;
+	bool _firstMove;
 	int _keyCount;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
+		if (newPlayerPos->isPortal)
+		{
+			//Go to the new position
+		}
+
 		_screen -> MoveObject(*_playerPos, *newPlayerPos);
 		newPlayerPos->object = _playerPos->object;
 		_playerPos->object = nullptr;
@@ -223,9 +236,17 @@ private :
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY() + 1, _playerPos->GetX()));
 			break;
 		case RIGHT:
+			if (_playerDir == -1) {
+				_playerDir = 1;
+				_player->FlipSprite();
+			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() + 1));
 			break;
 		case LEFT:
+			if (_playerDir == 1) {
+				_playerDir = -1;
+				_player->FlipSprite();
+			}
 			newPlayerPos = _tileMap.at(make_pair(_playerPos->GetY(), _playerPos->GetX() - 1));
 			break;
 		case QUIT:
@@ -256,13 +277,24 @@ private :
 			SceneManager::Instance()->RestartScene();
 			return;
 		}
+
 		if (newPlayerPos->isWining) 
 		{
 			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
 			return;
 		}
 
-		if (newPlayerPos->isWalkable) MovePlayer(newPlayerPos);
+		if (newPlayerPos->isPortal)
+		{
+			MovePlayer(((PortalTile*)newPlayerPos)->partner);
+			return;
+		}
+
+		if (newPlayerPos->isWalkable) 
+		{
+			_playerPos->sprite = Sprite(BEI);
+			MovePlayer(newPlayerPos);
+		}
 	}
 
 public :
@@ -273,15 +305,18 @@ public :
 	{
 		_level = SceneManager::Instance()->currentLevel;
 		_keyCount = 0;
+		_firstMove = true;
+
+		PortalTile* firstPortalOfPair[10]{ nullptr };
 
 		// Build TileMap
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
 		{
 			for (int x = 0; x < LEVEL_WIDTH; x++)
 			{
-				char tileType = _level.map[y][x];
+				char tileType = _level.lvlMap[y][x];
 
-				Tile* tile;
+				Tile* tile = nullptr;
 
 				switch (tileType) {
 				case 'w':
@@ -289,6 +324,7 @@ public :
 					break;
 				case 'l':
 					tile = new LaserTile(y, x);
+					_lasers.push_back(tile);
 					break;
 				case 'e':
 					tile = new ExitTile(y, x);
@@ -306,12 +342,30 @@ public :
 					break;
 				case 'p':
 					tile = new FloorTile(y, x);
-					tile->object = new Player();
+					_player = new Player();
+					tile->object = _player;
 					_playerPos = tile;
+
+					_playerDir = _level.playerStartDir;
+					if (_playerDir == -1) _player->FlipSprite();
 					break;
 				default:
-					tile = new Tile(y, x);
-					break;
+					if (!isdigit(tileType)) break;
+
+					PortalTile* portalTile = new PortalTile(y, x);
+					tile = portalTile;
+					int index = (tileType - '0');
+
+					if (firstPortalOfPair[index] == nullptr)
+					{
+						firstPortalOfPair[index] = portalTile;
+					}
+
+					else
+					{
+						firstPortalOfPair[index]->partner = portalTile;
+						portalTile->partner = firstPortalOfPair[index];
+					}
 				}
 
 				_tileMap[make_pair(y, x)] = tile;
@@ -328,6 +382,7 @@ public :
 	void Unload() override
 	{
 		_screen->ClearScreen();
+		_lasers.clear();
 		
 		for (int y = 0; y < LEVEL_HEIGHT; y++)
 		{
@@ -340,9 +395,27 @@ public :
 		}
 	}
 
-	// Gets called every frame
+	// Gets called every new input
 	void Update() override
 	{
+		//If it's our first move we want to erase the lasers
+		if (_firstMove)
+		{
+			char c = _getch();
+			if (c != QUIT)
+			{
+				FloorTile ft = FloorTile(0, 0);
+
+				for (Tile* laser : _lasers)
+				{
+					_screen->DrawSprite(*laser, ft.sprite);
+				}
+
+				_screen->UpdateScreen();
+				_firstMove = false;
+			}
+		}
+
 		CheckForPlayerMovement();
 	}
 };

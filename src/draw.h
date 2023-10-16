@@ -1,11 +1,15 @@
 #pragma once
 #include <iostream>
+#include <iostream>
 #include <windows.h>
 #include <string>
 #include "tile.h"
 #include "gameobject.h"
 #include "global.h"
 #include "ui.h"
+#include <fstream>
+
+using namespace std;
 
 class Screen
 {
@@ -17,6 +21,7 @@ private:
     SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
     CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+    CHAR_INFO menuImage[SCREEN_HEIGHT][SCREEN_WIDTH];
 
     void InitScreen()
     {
@@ -29,6 +34,7 @@ public:
     Screen()
     {
         InitScreen();
+        LoadMenuScreenImage();
     };
 
     void ReadOutput()
@@ -50,14 +56,65 @@ public:
         UpdateScreen();
     }
 
+    void LoadMenuScreenImage()
+    {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                menuImage[i][j].Char.AsciiChar = ' ';
+                menuImage[i][j].Attributes = YEL;
+            }
+        }
+
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][10].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][40].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][80].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][110].Attributes = RED;
+
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[35][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[36][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[37][i].Attributes = RED;
+
+        fstream myfile;
+        myfile.open("logo.txt", ios::in);
+
+        if (!myfile) {
+            cout << "Can't find file";
+        }
+        else {
+            char ch;
+            int i = 0;
+            int j = 0;
+            bool negative = false;
+
+            while (1) {
+                myfile >> ch;
+
+                if (myfile.eof()) break;
+                else if (isdigit(ch)) {
+                    if (ch == '0') menuImage[10 + j][20 + i].Attributes = YEL;
+                    else if (ch == '1') menuImage[10 + j][20 + i].Attributes = WHI;
+                    else if (ch == '2') menuImage[10 + j][20 + i].Attributes = BLA;
+                    
+                    i++;
+                    if (i == 80) {
+                        i = 0;
+                        j++;
+                    }
+                }
+            }
+        }
+    }
+
     void DrawMenuScreen()
     {
-        string s = "press any button to continue or ESC to quit.";
-
-        for (int j = 0; j < s.length(); j ++)
+        for (int j = 0; j < SCREEN_HEIGHT; j++)
         {
-            buffer[10][j + 5].Char.AsciiChar = s[j];
-            buffer[10][j + 5].Attributes = 10;
+            for (int i = 0; i < SCREEN_WIDTH; i++)
+            {
+                buffer[j][i] = menuImage[j][i];
+            }
         }
     }
 
@@ -70,8 +127,8 @@ public:
         {
             for (int j = 0; j < BUTTON_WIDTH; j++)
             {
-                buffer[y + i][x + j].Char.AsciiChar = button -> characters[i][j];
-                buffer[y + i][x + j].Attributes = button -> colors[i][j];
+                buffer[y + i][x + j].Char.AsciiChar = button -> unhovered.characters[i][j];
+                buffer[y + i][x + j].Attributes = button ->unhovered.colors[i][j];
             }
         }
     }
@@ -85,14 +142,31 @@ public:
         {
             for (int j = 0; j < BUTTON_WIDTH; j++)
             {
-                buffer[y + i][x + j].Attributes = 10;
+                buffer[y + i][x + j].Char.AsciiChar = button->hovered.characters[i][j];
+                buffer[y + i][x + j].Attributes = button->hovered.colors[i][j];
             }
         }
     }
 
     void DrawLevelSelectScreen()
     {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                buffer[i][j].Char.AsciiChar = ' ';
+                buffer[i][j].Attributes = YEL;
+            }
+        }
 
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][10].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][40].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][80].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][110].Attributes = RED;
+
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[35][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[36][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[37][i].Attributes = RED;
     }
 
     void DrawSprite(Tile& tile, Sprite& sprite)
