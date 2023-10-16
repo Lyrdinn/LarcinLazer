@@ -145,6 +145,7 @@ public :
 		buttons.push_back(new Level3Button(Level3(), 30, 30));
 		buttons.push_back(new Level4Button(Level4(), 30, 40));
 		buttons.push_back(new Level5Button(Level5(), 30, 50));
+		buttons.push_back(new Level6Button(Level6(), 30, 60));
 		
 		for (LevelButton* button : buttons)
 		{
