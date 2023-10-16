@@ -5,6 +5,7 @@
 #include "global.h"
 #include <conio.h>
 #include <map>
+#include <array>
 
 class Scene {
 protected :
@@ -105,10 +106,9 @@ public :
 		_screen -> UpdateScreen();
 	}
 
-	void Unload() override 
+	void Unload() override
 	{
 		_screen->ClearScreen();
-		// Free everything
 	}
 
 	void Update() override
@@ -138,18 +138,19 @@ public :
 
 	void Load() override
 	{
-		buttons.push_back(new LevelButton(Level1(), 5, 5));
-		buttons.push_back(new LevelButton(Level2(), 5, 10));
-		buttons.push_back(new LevelButton(Level3(), 5, 15));
-		buttons.push_back(new LevelButton(Level4(), 5, 20));
-		buttons.push_back(new LevelButton(Level5(), 5, 25));
+		_screen->DrawLevelSelectScreen();
 
+		buttons.push_back(new Level1Button(Level1(), 30, 10));
+		buttons.push_back(new Level2Button(Level2(), 30, 20));
+		buttons.push_back(new Level3Button(Level3(), 30, 30));
+		buttons.push_back(new Level4Button(Level4(), 30, 40));
+		buttons.push_back(new Level5Button(Level5(), 30, 50));
+		
 		for (LevelButton* button : buttons)
 		{
 			_screen->DrawButtonUnHovered(button);
 		}
 
-		_screen -> DrawLevelSelectScreen();
 		_screen -> DrawButtonHovered(buttons[0]);
 		_currentButtonIndex = 0;
 

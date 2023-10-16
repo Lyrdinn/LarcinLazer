@@ -3,8 +3,8 @@
 #define SCREEN_WIDTH 120
 #define SCREEN_HEIGHT 80
 
-#define BUTTON_WIDTH 3
-#define BUTTON_HEIGHT 3
+#define BUTTON_WIDTH 60
+#define BUTTON_HEIGHT 9
 
 #define TILE_WIDTH 8
 #define TILE_HEIGHT 8
@@ -25,3 +25,5 @@
 #define YEL 100 // Yellow
 #define RED 72  // Red
 #define BEI 230 // Beige
+#define BLU 150 // Blue
+#define GRE 140 // Grey

@@ -93,14 +93,14 @@ public :
         isWining = false;
         isPortal = true;
 
-        sprite.colors[0] = { BLA,BLA,BLA,BLA,BLA,BLA,BLA,BLA };
-        sprite.colors[1] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[2] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[3] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[4] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[5] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[6] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
-        sprite.colors[7] = { BLA,BLA,BLA,BLA,BLA,BLA,BLA,BLA };
+        sprite.colors[0] = { BLU,BLU,BLU,BLU,BLU,BLU,BLU,BLU };
+        sprite.colors[1] = { BLU,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[2] = { BLU,YEL,BLU,BLU,BLU,BLU,BLU,BLU };
+        sprite.colors[3] = { BLU,YEL,BLU,YEL,YEL,YEL,YEL,BLU };
+        sprite.colors[4] = { BLU,YEL,BLU,YEL,YEL,BLU,YEL,BLU };
+        sprite.colors[5] = { BLU,YEL,BLU,BLU,BLU,BLU,YEL,BLU };
+        sprite.colors[6] = { BLU,YEL,YEL,YEL,YEL,YEL,YEL,BLU };
+        sprite.colors[7] = { BLU,BLU,BLU,BLU,BLU,BLU,BLU,BLU };
     }
 };
 

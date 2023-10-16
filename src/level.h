@@ -166,6 +166,38 @@ public:
 	}
 };
 
+class Level6 : public Level
+{
+public:
+
+	Level6() : Level()
+	{
+		playerStartDir = 1;
+		const int width = 13;
+		const int height = 7;
+
+		char smallLevel[height][width] = {
+		{ ' ', 'l', '2', 'w', ' ' , ' ', 'e', 'l', '0', 'w', 'l', ' ', '1'},
+		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
+		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
+		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
+		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
+		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
+		{ '1', ' ', ' ', 'w', '2' , 'l', 'p', ' ', ' ', 'w', '0', ' ', ' '} };
+
+		int yOffset = 3;
+		int xOffset = 0;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				lvlMap[yOffset + y][xOffset + x] = smallLevel[y][x];
+			}
+		}
+	}
+};
+
 // Empty Template 
 /*
 char smallLevel[height][width] = {

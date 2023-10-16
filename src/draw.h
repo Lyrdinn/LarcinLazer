@@ -58,6 +58,24 @@ public:
 
     void LoadMenuScreenImage()
     {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                menuImage[i][j].Char.AsciiChar = ' ';
+                menuImage[i][j].Attributes = YEL;
+            }
+        }
+
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][10].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][40].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][80].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][110].Attributes = RED;
+
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[35][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[36][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[37][i].Attributes = RED;
+
         fstream myfile;
         myfile.open("logo.txt", ios::in);
 
@@ -66,23 +84,24 @@ public:
         }
         else {
             char ch;
-            int i = 21;
-            int j = 11;
+            int i = 0;
+            int j = 0;
             bool negative = false;
 
             while (1) {
                 myfile >> ch;
 
                 if (myfile.eof()) break;
-                else if (ch == '\n') {
-                    j++;
-                    i = 21;
-                }
                 else if (isdigit(ch)) {
-                    if (ch == '0') menuImage[j][i].Attributes = 0;
-                    else if (ch == '1') menuImage[j][i].Attributes = WHI;
-                    else if (ch == '2') menuImage[j][i].Attributes = BLA;
+                    if (ch == '0') menuImage[10 + j][20 + i].Attributes = YEL;
+                    else if (ch == '1') menuImage[10 + j][20 + i].Attributes = WHI;
+                    else if (ch == '2') menuImage[10 + j][20 + i].Attributes = BLA;
+                    
                     i++;
+                    if (i == 80) {
+                        i = 0;
+                        j++;
+                    }
                 }
             }
         }
@@ -94,21 +113,9 @@ public:
         {
             for (int i = 0; i < SCREEN_WIDTH; i++)
             {
-                buffer[j][i].Char.AsciiChar = ' ';
-                buffer[j][i].Attributes = YEL;
+                buffer[j][i] = menuImage[j][i];
             }
         }
-
-        for (int j = 10; j < 50; j++)
-        {
-            for (int i = 20; i < 100; i++)
-            {
-                buffer[j][i].Char.AsciiChar = ' ';
-                buffer[j][i].Attributes = BLA;
-            }
-        }
-        
-        //buffer[12] = {BLA,WHI,BLA,WHI,WHI,WHI,WHI,BLA,BLA,0,0,0,0,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,0,0,BLA,BLA,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,BLA,BLA,BLA,BLA,WHI,WHI,WHI,WHI,BLA,BLA,0,BLA,WHI,WHI}
     }
 
     void DrawButtonUnHovered(Button* button)
@@ -120,8 +127,8 @@ public:
         {
             for (int j = 0; j < BUTTON_WIDTH; j++)
             {
-                buffer[y + i][x + j].Char.AsciiChar = button -> characters[i][j];
-                buffer[y + i][x + j].Attributes = button -> colors[i][j];
+                buffer[y + i][x + j].Char.AsciiChar = button -> unhovered.characters[i][j];
+                buffer[y + i][x + j].Attributes = button ->unhovered.colors[i][j];
             }
         }
     }
@@ -135,14 +142,31 @@ public:
         {
             for (int j = 0; j < BUTTON_WIDTH; j++)
             {
-                buffer[y + i][x + j].Attributes = 10;
+                buffer[y + i][x + j].Char.AsciiChar = button->hovered.characters[i][j];
+                buffer[y + i][x + j].Attributes = button->hovered.colors[i][j];
             }
         }
     }
 
     void DrawLevelSelectScreen()
     {
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                buffer[i][j].Char.AsciiChar = ' ';
+                buffer[i][j].Attributes = YEL;
+            }
+        }
 
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][10].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][40].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][80].Attributes = RED;
+        for (int j = 0; j < SCREEN_HEIGHT; j++) buffer[j][110].Attributes = RED;
+
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[35][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[36][i].Attributes = RED;
+        for (int i = 0; i < SCREEN_WIDTH; i++) buffer[37][i].Attributes = RED;
     }
 
     void DrawSprite(Tile& tile, Sprite& sprite)

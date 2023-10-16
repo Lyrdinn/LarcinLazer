@@ -26,6 +26,29 @@ public:
     Sprite() : Sprite(BLA) { };
 };
 
+class ButtonSprite
+{
+public :
+
+    char characters[BUTTON_HEIGHT][BUTTON_WIDTH];
+
+    array< array<int, BUTTON_WIDTH>, BUTTON_HEIGHT> colors;
+
+    ButtonSprite(int color)
+    {
+        for (int y = 0; y < BUTTON_HEIGHT; y++)
+        {
+            for (int x = 0; x < BUTTON_WIDTH; x++)
+            {
+                characters[y][x] = ' ';
+                colors[y][x] = color;
+            }
+        }
+    }
+
+    ButtonSprite() : ButtonSprite(BLA) { };
+};
+
 class GameObject
 {
 public :
