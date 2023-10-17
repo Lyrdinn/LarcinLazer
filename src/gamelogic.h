@@ -45,6 +45,7 @@ public:
 	Scene* menuScene;
 	Scene* levelSelectScene;
 	Scene* gameScene;
+	Scene* winScene;
 
 	static SceneManager* Instance()
 	{
@@ -290,7 +291,7 @@ private :
 		if (newPlayerPos->isWining) 
 		{
 			if (_jewelIsPickedUp) _level->jewelIsUnlocked = true;
-			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
+			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->winScene);
 			return;
 		}
 
@@ -432,5 +433,38 @@ public :
 		}
 
 		CheckForPlayerMovement();
+	}
+};
+
+class WinScene : public Scene
+{
+private:
+
+public:
+
+	WinScene(Screen* screen) : Scene(screen) {}
+
+	void Load() override
+	{
+		_screen->DrawMenuScreen();
+		_screen->UpdateScreen();
+	}
+
+	void Unload() override
+	{
+		_screen->ClearScreen();
+	}
+
+	void Update() override
+	{
+		char c = _getch();
+		if (c == QUIT) {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->ChangeScene(sceneManager->levelSelectScene);
+		}
+		else {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->ChangeScene(sceneManager->levelSelectScene);
+		}
 	}
 };

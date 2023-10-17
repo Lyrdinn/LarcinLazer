@@ -22,6 +22,7 @@ private:
 
     CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
     CHAR_INFO menuImage[SCREEN_HEIGHT][SCREEN_WIDTH];
+    CHAR_INFO winImage[SCREEN_HEIGHT][SCREEN_WIDTH];
 
     void InitScreen()
     {
