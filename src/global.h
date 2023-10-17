@@ -26,4 +26,5 @@
 #define RED 72  // Red
 #define BEI 230 // Beige
 #define BLU 150 // Blue
+#define SKY 190 // Sky Blue
 #define GRE 140 // Grey

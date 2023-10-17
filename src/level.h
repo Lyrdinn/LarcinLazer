@@ -9,7 +9,8 @@ class Level
 {
 public:
 	char lvlMap[LEVEL_HEIGHT][LEVEL_WIDTH];
-	int playerStartDir; //Direction at which the player starts
+	bool jewelIsUnlocked = false;
+	int playerStartDir;
 
 	Level()
 	{
@@ -35,7 +36,7 @@ public:
 
 		char smallLevel[height][width] = {
 		{ ' ', ' ', ' ', ' ', ' ', 'l' , ' '},
-		{ 'p', ' ', 'l', ' ', ' ', ' ' , ' '},
+		{ 'p', ' ', 'l', 'j', ' ', ' ' , ' '},
 		{ ' ', ' ', ' ', ' ', ' ', 'l' , 'e'} };
 		
 		int yOffset = 3;
@@ -62,10 +63,10 @@ public:
 		const int height = 5;
 
 		char smallLevel[height][width] = {
-		{ 'w', 'w', 'w', 'l', ' ', 'd' , 'e', 'w'},
+		{ 'w', 'w', 'w', 'l', ' ', ' ' , 'e', 'w'},
 		{ 'w', 'w', 'w', ' ', ' ', 'w' , 'w', 'w'},
 		{ 'p', ' ', ' ', ' ', ' ', 'l' , ' ', ' '},
-		{ ' ', ' ', 'l', ' ', ' ', 'l' , ' ', 'k'},
+		{ ' ', ' ', 'l', ' ', ' ', 'l' , ' ', 'j'},
 		{ ' ', ' ', 'l', ' ', ' ', ' ' , ' ', ' '} };
 
 		int yOffset = 2;
@@ -95,7 +96,7 @@ public:
 		{ 'e', 'd', ' ', ' ', ' ', 'd' , ' ', ' ', ' ', ' ', 'p'},
 		{ 'w', 'w', 'l', ' ', 'w', 'w' , 'w', ' ', 'l', 'w', 'w'},
 		{ 'w', 'k', 'l', ' ', ' ', 'w' , 'l', ' ', ' ', ' ', 'w'},
-		{ 'w', ' ', ' ', ' ', 'l', 'w' , ' ', ' ', 'l', 'k', 'w'} };
+		{ 'w', ' ', ' ', ' ', 'l', 'w' , 'j', ' ', 'l', 'k', 'w'} };
 
 		int yOffset = 3;
 		int xOffset = 3;
@@ -123,7 +124,7 @@ public:
 		char smallLevel[height][width] = {
 		{ 'e', ' ', ' ', 'w', 'w' , 'w', '0', 'l', 'p'},
 		{ ' ', 'l', ' ', 'w', 'w' , 'w', ' ', ' ', ' '},
-		{ ' ', ' ', '0', 'w', 'w' , 'w', 'l', ' ', 'l'} };
+		{ ' ', ' ', '0', 'w', 'w' , 'w', 'l', 'j', 'l'} };
 
 		int yOffset = 3;
 		int xOffset = 3;
@@ -149,7 +150,7 @@ public:
 		const int height = 3;
 
 		char smallLevel[height][width] = {
-		{ ' ', 'l', '2', 'w', ' ' , ' ', 'e', 'l', '0', 'w', 'l', ' ', '1'},
+		{ 'j', 'l', '2', 'w', ' ' , ' ', 'e', 'l', '0', 'w', 'l', ' ', '1'},
 		{ ' ', 'l', ' ', 'w', ' ' , 'l', 'l', 'l', ' ', 'w', 'l', ' ', 'l'},
 		{ '1', ' ', ' ', 'w', '2' , 'l', 'p', ' ', ' ', 'w', '0', ' ', ' '} };
 
@@ -179,8 +180,8 @@ public:
 		char smallLevel[height][width] = {
 		{ 'p', ' ', 'w', 'w', 'k' , 'l', 'l', ' ', ' ', ' ', ' ', 'l', '1'},
 		{ 'l', ' ', 'w', 'w', ' ' , 'l', 'l', ' ', 'l', 'l', ' ', 'l', ' '},
-		{ 'l', ' ', 'w', 'w', ' ' , 'l', 'l', ' ', 'l', 'l', ' ', 'l', ' '},
-		{ ' ', ' ', 'w', 'w', ' ' , ' ', ' ', ' ', 'l', 'l', ' ', ' ', ' '},
+		{ 'l', ' ', 'w', 'w', ' ' , 'l', 'l', ' ', 'l', 'l', ' ', ' ', ' '},
+		{ ' ', ' ', 'w', 'w', ' ' , ' ', ' ', ' ', 'l', 'j', ' ', 'l', ' '},
 		{ ' ', 'l', 'w', 'w', 'w' , 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
 		{ ' ', 'l', 'w', 'w', ' ' , 'l', 'l', 'l', 'l', ' ', ' ', ' ', ' '},
 		{ ' ', ' ', 'w', 'w', ' ' , ' ', ' ', ' ', 'd', ' ', 'l', 'l', ' '},

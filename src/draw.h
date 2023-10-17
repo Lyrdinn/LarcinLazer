@@ -118,32 +118,39 @@ public:
         }
     }
 
-    void DrawButtonUnHovered(Button* button)
+    void DrawButton(Button* button, bool hovered) 
     {
         int x = button->GetX();
         int y = button->GetY();
+        ButtonSprite buttonSprite = hovered ? button->hovered : button->unhovered;
 
         for (int i = 0; i < BUTTON_HEIGHT; i++)
         {
             for (int j = 0; j < BUTTON_WIDTH; j++)
             {
-                buffer[y + i][x + j].Char.AsciiChar = button -> unhovered.characters[i][j];
-                buffer[y + i][x + j].Attributes = button ->unhovered.colors[i][j];
+                buffer[y + i][x + j].Char.AsciiChar = buttonSprite.characters[i][j];
+                buffer[y + i][x + j].Attributes = buttonSprite.colors[i][j];
             }
         }
     }
 
-    void DrawButtonHovered(Button * button)
+    void DrawLevelButton(LevelButton* levelButton, bool hovered)
     {
-        int x = button->GetX();
-        int y = button->GetY();
+        DrawButton(levelButton, hovered);
 
-        for (int i = 0; i < BUTTON_HEIGHT; i++)
+        if (!levelButton->GetLevel()->jewelIsUnlocked) return;
+
+        Sprite jewelSprite = Jewel().sprite;
+        int x = levelButton->GetX() + 46;
+        int y = levelButton->GetY();
+
+        for (int i = 0; i < TILE_HEIGHT; i++)
         {
-            for (int j = 0; j < BUTTON_WIDTH; j++)
+            for (int j = 0; j < TILE_WIDTH; j++)
             {
-                buffer[y + i][x + j].Char.AsciiChar = button->hovered.characters[i][j];
-                buffer[y + i][x + j].Attributes = button->hovered.colors[i][j];
+                if (jewelSprite.colors[i][j] == YEL) continue;
+                buffer[y + i][x + j].Char.AsciiChar = jewelSprite.characters[i][j];
+                buffer[y + i][x + j].Attributes = jewelSprite.colors[i][j];
             }
         }
     }

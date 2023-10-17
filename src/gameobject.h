@@ -125,3 +125,21 @@ public:
         sprite.colors[7] = { BLA,BLA,BLA,BLA,BLA,BLA,BLA,BLA };
     }
 };
+
+class Jewel : public GameObject
+{
+public:
+    Jewel()
+    {
+        name = "Jewel";
+
+        sprite.colors[0] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+        sprite.colors[1] = { YEL,WHI,WHI,WHI,WHI,WHI,WHI,YEL };
+        sprite.colors[2] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[3] = { WHI,WHI,WHI,WHI,WHI,WHI,WHI,WHI };
+        sprite.colors[4] = { YEL,WHI,WHI,WHI,WHI,WHI,WHI,YEL };
+        sprite.colors[5] = { YEL,YEL,WHI,WHI,WHI,WHI,YEL,YEL };
+        sprite.colors[6] = { YEL,YEL,YEL,WHI,WHI,YEL,YEL,YEL };
+        sprite.colors[7] = { YEL,YEL,YEL,YEL,YEL,YEL,YEL,YEL };
+    }
+};
