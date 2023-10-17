@@ -35,7 +35,18 @@ public:
     Screen()
     {
         InitScreen();
-        LoadMenuScreenImage();
+
+        for (int i = 0; i < SCREEN_HEIGHT; i++)
+        {
+            for (int j = 0; j < SCREEN_WIDTH; j++)
+            {
+                menuImage[i][j].Char.AsciiChar = ' ';
+                winImage[i][j].Char.AsciiChar = ' ';
+            }
+        }
+
+        LoadImage("menu.txt", menuImage);
+        LoadImage("win.txt", winImage);
     };
 
     void ReadOutput()
@@ -57,28 +68,10 @@ public:
         UpdateScreen();
     }
 
-    void LoadMenuScreenImage()
+    void LoadImage(string path, CHAR_INFO buf[SCREEN_HEIGHT][SCREEN_WIDTH])
     {
-        for (int i = 0; i < SCREEN_HEIGHT; i++)
-        {
-            for (int j = 0; j < SCREEN_WIDTH; j++)
-            {
-                menuImage[i][j].Char.AsciiChar = ' ';
-                menuImage[i][j].Attributes = YEL;
-            }
-        }
-
-        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][10].Attributes = RED;
-        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][40].Attributes = RED;
-        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][80].Attributes = RED;
-        for (int j = 0; j < SCREEN_HEIGHT; j++) menuImage[j][110].Attributes = RED;
-
-        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[35][i].Attributes = RED;
-        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[36][i].Attributes = RED;
-        for (int i = 0; i < SCREEN_WIDTH; i++) menuImage[37][i].Attributes = RED;
-
         fstream myfile;
-        myfile.open("logo.txt", ios::in);
+        myfile.open(path, ios::in);
 
         if (!myfile) {
             cout << "Can't find file";
@@ -94,12 +87,13 @@ public:
 
                 if (myfile.eof()) break;
                 else if (isdigit(ch)) {
-                    if (ch == '0') menuImage[10 + j][20 + i].Attributes = YEL;
-                    else if (ch == '1') menuImage[10 + j][20 + i].Attributes = WHI;
-                    else if (ch == '2') menuImage[10 + j][20 + i].Attributes = BLA;
-                    
+                    if (ch == '0') buf[j][i].Attributes = YEL;
+                    else if (ch == '1') buf[j][i].Attributes = WHI;
+                    else if (ch == '2') buf[j][i].Attributes = BLA;
+                    else if (ch == '3') buf[j][i].Attributes = RED;
+
                     i++;
-                    if (i == 80) {
+                    if (i == 120) {
                         i = 0;
                         j++;
                     }
@@ -115,6 +109,17 @@ public:
             for (int i = 0; i < SCREEN_WIDTH; i++)
             {
                 buffer[j][i] = menuImage[j][i];
+            }
+        }
+    }
+
+    void DrawWinScreen()
+    {
+        for (int j = 0; j < SCREEN_HEIGHT; j++)
+        {
+            for (int i = 0; i < SCREEN_WIDTH; i++)
+            {
+                buffer[j][i] = winImage[j][i];
             }
         }
     }

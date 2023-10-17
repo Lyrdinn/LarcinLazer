@@ -446,7 +446,7 @@ public:
 
 	void Load() override
 	{
-		_screen->DrawMenuScreen();
+		_screen->DrawWinScreen();
 		_screen->UpdateScreen();
 	}
 
