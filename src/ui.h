@@ -54,26 +54,21 @@ public :
 class LevelButton : public Button
 {
 private :
-	Level _level;
+	Level* _level;
 public :
-	LevelButton(Level level, int x, int y) : Button(x, y)
+	LevelButton(Level* level, int x, int y) : Button(x, y)
 	{
 		_level = level;
 
-		//Unhovered
 		for (int i = 0; i < BUTTON_HEIGHT; i++)
 		{
 			for (int j = 0; j < BUTTON_WIDTH; j++)
 			{
+				//Unhovered
 				unhovered.characters[i][j] = ' ';
 				unhovered.colors[i][j] = BLA;
-			}
-		}
-		//Hovered
-		for (int i = 0; i < BUTTON_HEIGHT; i++)
-		{
-			for (int j = 0; j < BUTTON_WIDTH; j++)
-			{
+
+				//Hovered
 				hovered.characters[i][j] = ' ';
 				hovered.colors[i][j] = GRE;
 			}
@@ -109,7 +104,7 @@ public :
 		}
 	}
 
-	Level GetLevel()
+	Level* GetLevel()
 	{
 		return _level;
 	}
@@ -118,7 +113,7 @@ public :
 class Level1Button : public LevelButton
 {
 public:
-	Level1Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level1Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][30] = WHI;
 		unhovered.colors[3][29] = WHI;
@@ -143,7 +138,7 @@ public:
 class Level2Button : public LevelButton
 {
 public:
-	Level2Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level2Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][29] = WHI;
 		unhovered.colors[2][30] = WHI;
@@ -172,7 +167,7 @@ public:
 class Level3Button : public LevelButton
 {
 public:
-	Level3Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level3Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][29] = WHI;
 		unhovered.colors[2][30] = WHI;
@@ -197,7 +192,7 @@ public:
 class Level4Button : public LevelButton
 {
 public:
-	Level4Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level4Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][29] = WHI;
 		unhovered.colors[2][30] = WHI;
@@ -226,7 +221,7 @@ public:
 class Level5Button : public LevelButton
 {
 public:
-	Level5Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level5Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][28] = WHI;
 		unhovered.colors[2][29] = WHI;
@@ -261,7 +256,7 @@ public:
 class Level6Button : public LevelButton
 {
 public:
-	Level6Button(Level level, int x, int y) : LevelButton(level, x, y)
+	Level6Button(Level* level, int x, int y) : LevelButton(level, x, y)
 	{
 		unhovered.colors[2][28] = WHI;
 		unhovered.colors[2][29] = WHI;

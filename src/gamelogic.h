@@ -40,11 +40,12 @@ private:
 
 public:
 	Scene* currentScene;
-	Level currentLevel;
+	Level* currentLevel;
 
 	Scene* menuScene;
 	Scene* levelSelectScene;
 	Scene* gameScene;
+	Scene* winScene;
 
 	static SceneManager* Instance()
 	{
@@ -85,7 +86,6 @@ public:
 
 	void QuitGame()
 	{
-		// Free everything
 		exit(0);
 	}
 };
@@ -129,39 +129,47 @@ class LevelSelectScene : public Scene
 {
 private :
 	// Later on add all the buttons with all the levels
-	vector<LevelButton*> buttons;
+	vector<Level*> _levels;
+	vector<LevelButton*> _buttons;
 	int _currentButtonIndex;
 
 public :
 
-	LevelSelectScene(Screen* screen) : Scene(screen) {}
+	LevelSelectScene(Screen* screen) : Scene(screen) 
+	{
+		_currentButtonIndex = 0;
+
+		_levels.push_back(new Level1());
+		_levels.push_back(new Level2());
+		_levels.push_back(new Level3());
+		_levels.push_back(new Level4());
+		_levels.push_back(new Level5());
+		_levels.push_back(new Level6());
+
+		_buttons.push_back(new Level1Button(_levels[0], 30, 10));
+		_buttons.push_back(new Level2Button(_levels[1], 30, 20));
+		_buttons.push_back(new Level3Button(_levels[2], 30, 30));
+		_buttons.push_back(new Level4Button(_levels[3], 30, 40));
+		_buttons.push_back(new Level5Button(_levels[4], 30, 50));
+		_buttons.push_back(new Level6Button(_levels[5], 30, 60));
+	}
 
 	void Load() override
 	{
 		_screen->DrawLevelSelectScreen();
 
-		buttons.push_back(new Level1Button(Level1(), 30, 10));
-		buttons.push_back(new Level2Button(Level2(), 30, 20));
-		buttons.push_back(new Level3Button(Level3(), 30, 30));
-		buttons.push_back(new Level4Button(Level4(), 30, 40));
-		buttons.push_back(new Level5Button(Level5(), 30, 50));
-		buttons.push_back(new Level6Button(Level6(), 30, 60));
-		
-		for (LevelButton* button : buttons)
+		for (LevelButton* button : _buttons)
 		{
-			_screen->DrawButtonUnHovered(button);
+			_screen->DrawLevelButton(button, false);
 		}
 
-		_screen -> DrawButtonHovered(buttons[0]);
-		_currentButtonIndex = 0;
-
+		_screen -> DrawLevelButton(_buttons[_currentButtonIndex], true);
 		_screen -> UpdateScreen();
 	}
 
 	void Unload() override
 	{
 		_screen->ClearScreen();
-		// Free everything
 	}
 
 	void Update() override
@@ -171,21 +179,21 @@ public :
 		//Get player UI input.
 		switch (_getch()) {
 			case UP:
-				_screen -> DrawButtonUnHovered(buttons[_currentButtonIndex]);
+				_screen -> DrawLevelButton(_buttons[_currentButtonIndex], false);
 				_currentButtonIndex--;
-				if (_currentButtonIndex == -1) _currentButtonIndex = buttons.size() - 1;
-				_screen -> DrawButtonHovered(buttons[_currentButtonIndex]);
+				if (_currentButtonIndex == -1) _currentButtonIndex = _buttons.size() - 1;
+				_screen -> DrawLevelButton(_buttons[_currentButtonIndex], true);
 				_screen -> UpdateScreen();
 				break;
 			case DOWN:
-				_screen->DrawButtonUnHovered(buttons[_currentButtonIndex]);
+				_screen->DrawLevelButton(_buttons[_currentButtonIndex], false);
 				_currentButtonIndex++;
-				if (_currentButtonIndex == buttons.size()) _currentButtonIndex = 0;
-				_screen->DrawButtonHovered(buttons[_currentButtonIndex]);
+				if (_currentButtonIndex == _buttons.size()) _currentButtonIndex = 0;
+				_screen->DrawLevelButton(_buttons[_currentButtonIndex], true);
 				_screen->UpdateScreen();
 				break;
 			case CONFIRM:
-				SceneManager::Instance() -> currentLevel = buttons[_currentButtonIndex]->GetLevel();
+				SceneManager::Instance() -> currentLevel = _buttons[_currentButtonIndex]->GetLevel();
 				SceneManager::Instance() -> ChangeScene(SceneManager::Instance() -> gameScene);
 				break;
 			case QUIT:
@@ -200,7 +208,7 @@ public :
 class GameScene : public Scene
 {
 private : 
-	Level _level;
+	Level* _level;
 	typedef map<pair<int, int>, Tile*> TileMap;
 
 	TileMap _tileMap;
@@ -210,14 +218,10 @@ private :
 	int _playerDir;
 	bool _firstMove;
 	int _keyCount;
+	bool _jewelIsPickedUp;
 
 	void MovePlayer(Tile* newPlayerPos)
 	{
-		if (newPlayerPos->isPortal)
-		{
-			//Go to the new position
-		}
-
 		_screen -> MoveObject(*_playerPos, *newPlayerPos);
 		newPlayerPos->object = _playerPos->object;
 		_playerPos->object = nullptr;
@@ -272,6 +276,12 @@ private :
 			_keyCount++;
 		}
 
+		if (object != nullptr && object->name == "Jewel")
+		{
+			delete(object);
+			_jewelIsPickedUp = true;
+		}
+
 		if (newPlayerPos->isDeadly) 
 		{
 			SceneManager::Instance()->RestartScene();
@@ -280,7 +290,8 @@ private :
 
 		if (newPlayerPos->isWining) 
 		{
-			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->levelSelectScene);
+			if (_jewelIsPickedUp) _level->jewelIsUnlocked = true;
+			SceneManager::Instance()->ChangeScene(SceneManager::Instance()->winScene);
 			return;
 		}
 
@@ -305,6 +316,7 @@ public :
 	{
 		_level = SceneManager::Instance()->currentLevel;
 		_keyCount = 0;
+		_jewelIsPickedUp = false;
 		_firstMove = true;
 
 		PortalTile* firstPortalOfPair[10]{ nullptr };
@@ -314,7 +326,7 @@ public :
 		{
 			for (int x = 0; x < LEVEL_WIDTH; x++)
 			{
-				char tileType = _level.lvlMap[y][x];
+				char tileType = _level->lvlMap[y][x];
 
 				Tile* tile = nullptr;
 
@@ -340,13 +352,17 @@ public :
 					tile = new FloorTile(y, x);
 					tile->object = new Door();
 					break;
+				case 'j':
+					tile = new FloorTile(y, x);
+					tile->object = new Jewel();
+					break;
 				case 'p':
 					tile = new FloorTile(y, x);
 					_player = new Player();
 					tile->object = _player;
 					_playerPos = tile;
 
-					_playerDir = _level.playerStartDir;
+					_playerDir = _level->playerStartDir;
 					if (_playerDir == -1) _player->FlipSprite();
 					break;
 				default:
@@ -417,5 +433,38 @@ public :
 		}
 
 		CheckForPlayerMovement();
+	}
+};
+
+class WinScene : public Scene
+{
+private:
+
+public:
+
+	WinScene(Screen* screen) : Scene(screen) {}
+
+	void Load() override
+	{
+		_screen->DrawWinScreen();
+		_screen->UpdateScreen();
+	}
+
+	void Unload() override
+	{
+		_screen->ClearScreen();
+	}
+
+	void Update() override
+	{
+		char c = _getch();
+		if (c == QUIT) {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->ChangeScene(sceneManager->levelSelectScene);
+		}
+		else {
+			SceneManager* sceneManager = SceneManager::Instance();
+			sceneManager->ChangeScene(sceneManager->levelSelectScene);
+		}
 	}
 };

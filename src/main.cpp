@@ -30,11 +30,13 @@ int main()
     MenuScene menuScene =  MenuScene(&screen);
     LevelSelectScene levelSelectScene =  LevelSelectScene(&screen);
     GameScene gameScene =  GameScene(&screen);
+    WinScene winScene = WinScene(&screen);
 
     SceneManager* Instance = SceneManager::Instance();
     Instance -> menuScene = &menuScene;
     Instance -> levelSelectScene = &levelSelectScene;
     Instance -> gameScene = &gameScene;
+    Instance -> winScene = &winScene;
 
     Instance -> ChangeScene(Instance -> menuScene);
 
