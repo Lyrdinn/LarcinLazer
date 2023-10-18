@@ -303,7 +303,7 @@ private :
 
 		if (newPlayerPos->isWalkable) 
 		{
-			_playerPos->sprite = Sprite(BEI);
+			if(!_playerPos->isPortal) _playerPos->sprite = Sprite(BEI);
 			MovePlayer(newPlayerPos);
 		}
 	}

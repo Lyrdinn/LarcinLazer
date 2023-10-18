@@ -1,5 +1,7 @@
-#include <iostream>
 #include <Windows.h>
+#include <iostream>
+#include <mmsystem.h>
+#include <string>
 #include <conio.h>
 #include <map>
 #include "gamelogic.h"
@@ -7,10 +9,14 @@
 #include "draw.h"
 #include "ui.h"
 
+#pragma comment (lib, "winmm.lib")
+
 using namespace std;
 
 int main()
 {
+    PlaySound(TEXT("larcin_lazer_menu_theme.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     //Resize de la fenetre pour qu'elle soit en grand écran obligatoire ainsi qu'en mode pixel art.
     keybd_event(VK_MENU, 0x38, 0, 0);
     keybd_event(VK_RETURN, 0x1c, 0, 0);
