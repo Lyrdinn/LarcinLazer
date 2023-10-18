@@ -9,7 +9,6 @@
 #include "ui.h"
 #include <fstream>
 
-using namespace std;
 
 class Screen
 {
