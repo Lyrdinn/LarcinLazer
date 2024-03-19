@@ -1,4 +1,4 @@
-<h3> Larcin Lazer </h3>
+<h1 align="center">  Larcin Lazer </h1>
 
 <p align="center">
   <img src="screenshots/menu.png" width="350" title="Menu screen">
@@ -14,7 +14,12 @@
 <p>
 Un jeu fait par Marina SECORD et Nino SANDLARZ
 
-Le jeu Larcin Lazer appartient à Doc Geraud et nous avons fait celui ci en ASCII à but éducatif
+Le jeu Larcin Lazer appartient à Doc Geraud et nous avons fait celui ci en ASCII à but éducatif dans le cadre d'un TP pour l'ENJMIN.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Nous avons réalisés pour ce projet :
+- Un jeu avec une architecture bas niveau comprenant 6 niveaux et des menus
+- Un système de sprites et de gestion de scène complexe et propre
+- Plusieurs types de dalles avec lasers, clef/porte, diamants gardés en mémoire, portails
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Controles :
