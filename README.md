@@ -1,7 +1,5 @@
 <h3> Larcin Lazer </h3>
 
-![screenshot](screenshots/menu.png)
-
 <p align="center">
   <img src="screenshots/menu.png" width="350" title="Menu screen">
   <img src="screenshots/win.png" width="350" title="Win screen">
