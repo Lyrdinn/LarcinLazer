@@ -24,6 +24,7 @@
     <ProjectGuid>{3f236f9b-a1f8-4e06-bb41-16b8f4f9fbdb}</ProjectGuid>
     <RootNamespace>BabaisAscii</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>LarcinLazer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
