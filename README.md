@@ -2,6 +2,11 @@
 
 ![screenshot](screenshot/menu.png)
 
+<p align="center">
+  <img src="screenshot/menu.png" width="350" title="Menu screen">
+  <img src="screenshot/win.png" width="350" title="Win screen">
+</p>
+
 <p>
 Un jeu fait par Marina SECORD et Nino SANDLARZ
 
