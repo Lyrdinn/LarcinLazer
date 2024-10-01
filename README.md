@@ -1,5 +1,9 @@
 <h1 align="center">  Larcin Lazer </h1>
 
+![Static Badge](https://img.shields.io/badge/Made%20in%20C%2B%2B-4083cb?style=flat-square&logo=c%2B%2B)
+
+
+
 <p align="center">
   <img src="screenshots/menu.png" width="350" title="Menu screen">
   <img src="screenshots/win.png" width="350" title="Win screen">
