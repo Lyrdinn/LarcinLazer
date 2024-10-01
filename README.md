@@ -1,7 +1,8 @@
 <h1 align="center">  Larcin Lazer </h1>
 
-![Static Badge](https://img.shields.io/badge/Made%20in%20C%2B%2B-4083cb?style=flat-square&logo=c%2B%2B)
-
+<p align="center"> 
+  ![Static Badge](https://img.shields.io/badge/Made%20in%20C%2B%2B-2d6eb3?style=flat-square&logo=c%2B%2B)
+</p>
 
 
 <p align="center">
