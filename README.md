@@ -17,7 +17,7 @@
 </p>
 
 <p>
-Un jeu fait par Marina SECORD et Nino SANDLARZ
+Un jeu fait par [Marina SECORD](https://github.com/Lyrdinn/) et [Nino SANDLARZ](https://github.com/Sand-Fox)
 
 Le jeu Larcin Lazer appartient à Doc Geraud et nous avons fait celui ci en ASCII à but éducatif dans le cadre d'un TP pour l'ENJMIN.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
