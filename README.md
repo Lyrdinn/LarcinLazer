@@ -16,8 +16,9 @@
   <img src="screenshots/level3.png" width="350" title="Level 3 with shows our biggest level">
 </p>
 
-<p>
 Un jeu fait par [Marina SECORD](https://github.com/Lyrdinn/) et [Nino SANDLARZ](https://github.com/Sand-Fox)
+
+<p>
 
 Le jeu Larcin Lazer appartient à Doc Geraud et nous avons fait celui ci en ASCII à but éducatif dans le cadre d'un TP pour l'ENJMIN.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
